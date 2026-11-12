@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BetoB · Bélinda to Business</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Libre+Bodoni:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--pad:40px;--panel:min(700px,50vw);--ease:cubic-bezier(.2,.7,.2,1)}
+html{scroll-behavior:smooth}
+html,body{overflow-x:hidden}
+body{background:#fff;color:#000;font-family:Jost,sans-serif;font-weight:400;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.u{text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:1px}
+
+header{position:fixed;top:0;left:0;right:0;z-index:20;background:#fff}
+.top{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 var(--pad)}
+.top nav{display:flex;align-items:center;gap:clamp(18px,3.6vw,56px)}
+.top nav>button,.top nav>a,.top nav>span{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;position:relative}
+.top nav>button:not(.av):hover::after,.top nav>a:hover::after,.top nav .on::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:1px;background:#000}
+.lang button{color:#999;letter-spacing:.16em}
+.lang button.cur{color:#000}
+.lang i{font-style:normal;color:#ccc;margin:0 6px}
+.av{position:relative;width:34px;height:34px;border-radius:50%;border:1px solid #000;padding:2px;flex:0 0 34px;transition:transform .3s var(--ease)}
+.av:hover{transform:scale(1.08)}
+.av img{width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:50% 28%;display:block}
+.av em{position:absolute;left:-1px;top:-1px;width:9px;height:9px;border-radius:50%;background:#ec7059;border:1.5px solid #fff}
+.wm{text-align:center;font-family:"Libre Bodoni",serif;font-weight:400;font-size:clamp(56px,8.2vw,118px);line-height:.95;letter-spacing:.06em;padding-left:.06em;transition:font-size .35s ease;cursor:pointer;overflow:hidden}
+.wm span{display:inline-block;animation:rise 1s var(--ease) both}
+.wm span:nth-child(2){animation-delay:.06s}.wm span:nth-child(3){animation-delay:.12s}.wm span:nth-child(4){animation-delay:.18s}.wm span:nth-child(5){animation-delay:.24s}
+@keyframes rise{from{transform:translateY(100%);opacity:0}to{transform:none;opacity:1}}
+.sub{text-align:center;font-size:10.5px;letter-spacing:.32em;text-transform:uppercase;padding:2px 0 16px;color:#222;animation:fade 1s .5s both;transition:opacity .3s,padding .3s,height .3s}
+.sub i{font-family:"Libre Bodoni",serif;font-style:italic;text-transform:none;letter-spacing:.02em;font-size:15px;margin:0 4px}
+header.small .sub{opacity:0;height:0;padding:0;overflow:hidden}
+header.small .wm{font-size:clamp(30px,3.2vw,44px);padding-bottom:6px}
+.rule{height:1px;background:#000;margin:0 var(--pad);transform-origin:left;animation:draw 1.1s .2s var(--ease) both}
+@keyframes draw{from{transform:scaleX(0)}to{transform:none}}
+
+.filters{display:flex;gap:26px;padding:22px var(--pad) 0;flex-wrap:wrap;animation:fade .8s .5s both}
+.filters button{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#888;padding-bottom:4px;border-bottom:1px solid transparent;transition:color .2s}
+.filters button:hover{color:#000}
+.filters button.on{color:#000;border-bottom-color:#000}
+.filters sup{font-size:8px;margin-left:3px;letter-spacing:0}
+
+main{display:grid;grid-template-columns:1fr 0;transition:grid-template-columns .5s cubic-bezier(.6,0,.2,1);min-height:calc(100vh - 260px)}
+body.open main{grid-template-columns:1fr var(--panel)}
+.grid{padding:26px var(--pad) 120px;display:grid;grid-template-columns:repeat(4,1fr);column-gap:30px;row-gap:46px;align-content:start}
+body.open .grid{grid-template-columns:repeat(3,1fr)}
+.tile{text-align:left;display:block;width:100%;align-self:start;opacity:0;transform:translateY(28px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.tile.in{opacity:1;transform:none}
+.tile.gone{display:none}
+.tile .bg{position:relative;display:block;aspect-ratio:4/5;padding:8px;background:var(--c);transition:filter .3s,padding .5s var(--ease)}
+.tile .bg::before{content:"";position:absolute;inset:3px;border:1px solid rgba(255,255,255,.45);pointer-events:none}
+.tile .fr{position:relative;width:100%;height:100%;overflow:hidden}
+.tile .fr::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06);pointer-events:none}
+.tile.tall .bg{aspect-ratio:4/5.6}
+.tile.off{margin-top:60px}
+.tile img{width:100%;height:100%;object-fit:cover;object-position:50% 0;display:block;transition:transform 1.2s var(--ease)}
+.tile:hover img{transform:scale(1.045)}
+.tile:hover .bg{padding:11px}
+.tile .n{font-size:11px;letter-spacing:.16em;text-transform:uppercase;margin-top:12px;display:inline-block}
+.tile .c{display:block;font-size:12px;color:#777;margin-top:3px;font-weight:300}
+.tile.active .n{text-decoration:underline;text-underline-offset:5px}
+.grid.dim .tile:not(.active) .bg{filter:saturate(.8) brightness(1.02)}
+.tile.active .bg{outline:1px solid var(--c);outline-offset:4px}
+
+aside{position:sticky;top:var(--hh,214px);height:calc(100vh - var(--hh,214px));overflow:hidden;border-left:1px solid #000;background:#fff;display:none}
+body.open aside{display:block}
+.qv{overflow-x:hidden;display:grid;grid-template-columns:47% 53%;height:100%;animation:fade .45s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.vis{position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.track{position:absolute;inset:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.track::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100%;height:100%;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;scroll-snap-stop:always}
+.slide video{max-height:78%;max-width:90%;box-shadow:0 30px 40px -20px rgba(0,0,0,.6);display:block}
+.slide img{max-height:78%;max-width:66%;box-shadow:0 30px 40px -20px rgba(0,0,0,.6);user-select:none;-webkit-user-drag:none}
+.vis .arr,.vis .cnt{z-index:2}
+.vis .cnt{position:absolute;left:20px;bottom:18px;font-size:10px;letter-spacing:.16em;color:rgba(255,255,255,.85)}
+.vis.light .cnt{color:rgba(0,0,0,.6)}
+.vis .arr{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;display:grid;place-items:center;font-size:18px;color:#fff;opacity:.8}
+.vis.light .arr{color:#000}
+.vis .arr:hover{opacity:1}.vis .prev{left:6px}.vis .next{right:6px}
+.vis.portrait{background:#ece9e4;align-items:stretch}
+.vis.portrait img{max-width:none;max-height:none;width:100%;height:100%;object-fit:cover;object-position:50% 30%;box-shadow:none}
+.tx{padding:32px 34px;overflow:auto;display:flex;flex-direction:column}
+.bar{display:flex;justify-content:space-between;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#777;margin-bottom:36px}
+.bar button{color:#000;font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+.pbar{align-items:baseline;gap:16px}
+.pbar .k{color:#000}
+.k{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase}
+.tx h2,.page h2{font-family:"Libre Bodoni",serif;font-weight:400;font-size:clamp(28px,2.7vw,38px);line-height:1.08;margin:14px 0 18px}
+.page h2 em,.tx h2 em{font-style:italic}
+.tx p{font-size:13px;line-height:1.75;color:#333;font-weight:300}
+.sw{display:flex;gap:8px;margin-top:24px}
+.sw{gap:6px;margin-top:22px}
+.sw button{padding:10px 0;width:28px}
+.sw button i{display:block;height:1px;background:#ccc;transition:background .3s,height .3s}
+.sw button:hover i{background:#888}
+.sw button.on i{background:#000;height:2px}
+.btn{display:block;margin-top:28px;background:#000;color:#fff;text-align:center;padding:16px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;transition:background .2s}
+.btn:hover{background:#333}
+.lk{margin-top:16px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;text-align:center}
+.meta{margin-top:auto;padding-top:26px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#999;display:flex;justify-content:space-between}
+
+.page{height:100%;overflow:auto;padding:32px 40px 60px;animation:fade .45s ease}
+.page p{font-size:13.5px;line-height:1.8;color:#333;font-weight:300;margin-bottom:14px;max-width:560px}
+.auto{border-top:1px solid #000;padding:22px 0 26px}
+.auto h3{font-family:"Libre Bodoni",serif;font-weight:400;font-size:24px;margin:8px 0 4px}
+.auto .hd{font-family:"Libre Bodoni",serif;font-style:italic;font-size:16px;color:#555;margin-bottom:12px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#000;border:1px solid #000;margin-top:14px}
+.steps div{background:#fff;padding:12px;font-size:12px;line-height:1.45}
+.steps b{display:block;font-family:"Libre Bodoni",serif;font-weight:400;font-size:18px;margin-bottom:4px}
+.flow{display:flex;align-items:flex-start;margin:22px 0 6px}
+.node{flex:1;min-width:0;text-align:center;display:flex;flex-direction:column;align-items:center}
+.ico{width:58px;height:58px;border-radius:50%;border:1px solid #000;display:grid;place-items:center;background:#fff;color:#111}
+.ico svg{width:24px;height:24px}
+.ico{position:relative}
+.dots{position:absolute;right:-6px;bottom:-2px;display:flex}
+.dots i{width:16px;height:16px;border-radius:50%;display:block;border:2px solid #fff}
+.dots i+i{margin-left:-6px}
+.node b{font-weight:400;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;margin-top:12px}
+.node small{font-size:11.5px;color:#777;font-weight:300;margin-top:4px;line-height:1.4;padding:0 4px}
+.arw{flex:0 0 26px;height:58px;position:relative}
+.arw::before{content:"";position:absolute;left:0;right:4px;top:50%;height:1px;background:#000}
+.arw::after{content:"";position:absolute;right:2px;top:calc(50% - 3px);width:6px;height:6px;border-top:1px solid #000;border-right:1px solid #000;transform:rotate(45deg)}
+.legend{display:flex;gap:18px;margin-top:14px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#555}
+.legend span{display:flex;align-items:center;gap:7px}.legend i{width:10px;height:10px;border-radius:50%;display:block}
+.note{margin-top:14px;font-size:12px;color:#777;font-weight:300;font-style:italic;font-family:"Libre Bodoni",serif}
+.res{margin-top:22px;background:#f6f4f0;padding:20px 22px;display:grid;grid-template-columns:auto 1fr;gap:6px 26px;align-items:center}
+.res .rk{grid-column:1/-1;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#777}
+.res .rn b{display:block;font-family:"Libre Bodoni",serif;font-weight:400;font-size:44px;line-height:1}
+.res .rn span{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#555;margin-top:6px;max-width:150px;line-height:1.5}
+.res p{margin:0;font-size:13.5px;line-height:1.7;color:#222}
+.tools{margin-top:12px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#777}
+.list{border-top:1px solid #000;margin-top:14px}
+.list div{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #e5e5e5;font-size:13px}
+.list span:last-child{color:#777;font-weight:300;text-align:right}
+.career div{display:block}
+.career b{font-weight:400;display:flex;justify-content:space-between;gap:12px}
+.career b span{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#777}
+.career small{display:block;color:#777;font-weight:300;font-size:12px;margin-top:3px}
+.brands{margin-top:14px;font-size:12px;color:#555;font-weight:300;line-height:1.7}
+.brands b{font-family:"Libre Bodoni",serif;font-weight:400;font-size:15px;color:#000}
+
+.maison{display:none;padding:56px var(--pad) 100px;grid-template-columns:minmax(300px,5fr) 7fr;gap:clamp(40px,7vw,120px);animation:fade .6s ease}
+body.mpage .maison{display:grid}
+body.mpage main{display:none}
+.mleft{position:sticky;top:calc(var(--hh,214px) + 40px);align-self:start}
+.mbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:34px}
+.mbar button{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase}
+.ring{position:relative;width:clamp(180px,17vw,240px);aspect-ratio:1;border-radius:50%;border:1px solid #000;padding:6px}
+.ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:50% 28%;display:block}
+.ring em{position:absolute;left:calc(14.6% - 9px);top:calc(14.6% - 9px);width:18px;height:18px;border-radius:50%;background:#ec7059;border:2px solid #fff}
+.mleft .k{margin-top:34px}
+.mleft h2{font-family:"Libre Bodoni",serif;font-weight:400;font-size:clamp(40px,4.6vw,68px);line-height:1;margin:16px 0 30px;letter-spacing:-.01em}
+.mleft h2 em{font-style:italic}
+.mail{margin-top:22px;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;font-size:13px}
+.mail span{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#777;width:100%}
+.mail a{border-bottom:1px solid #000;padding-bottom:2px}
+.mail button{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#777}
+.mail button:hover{color:#000}
+.mleft .btn{display:inline-block;padding:16px 34px;margin-top:0}
+.mright p.lead{font-size:clamp(16px,1.35vw,19px);line-height:1.75;font-weight:300;color:#222;margin-bottom:18px;max-width:640px}
+.sec{border-top:1px solid #000;margin-top:56px;padding-top:18px}
+.sec>.k{margin-bottom:26px}
+.nums{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.nums b{display:block;font-family:"Libre Bodoni",serif;font-weight:400;font-size:clamp(48px,5vw,76px);line-height:1}
+.nums span{display:block;margin-top:10px;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#555;line-height:1.6}
+.logos{display:flex;align-items:center;gap:clamp(34px,4vw,60px)}
+.logos span{display:flex;flex-direction:column;align-items:center;gap:12px;color:#111}
+.logos svg{width:clamp(38px,3.4vw,50px);height:clamp(38px,3.4vw,50px);display:block}
+.logos small{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#777}
+.tl{display:flex;align-items:center;gap:14px}
+.tl svg{width:18px;height:18px;flex:0 0 18px;color:#111}
+.tl svg *{fill:currentColor !important}
+.names{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 34px;font-family:"Libre Bodoni",serif;font-size:clamp(34px,3.6vw,54px);line-height:1.1}
+.names i{font-style:normal;color:#bbb;font-size:.6em}
+.journal{display:none;padding:56px var(--pad) 100px;max-width:1100px;margin:0 auto;animation:fade .6s ease}
+body.jpage .journal{display:block}
+body.jpage main,body.jpage .maison{display:none}
+.jhead{display:flex;justify-content:space-between;align-items:flex-start;gap:30px;padding-bottom:30px;border-bottom:1px solid #000}
+.jhead h2{font-family:"Libre Bodoni",serif;font-weight:400;font-size:clamp(44px,5vw,72px);line-height:1}
+.jhead p{margin-top:14px;font-size:15px;font-weight:300;color:#444;max-width:520px;line-height:1.6}
+.jhead button{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap}
+.jempty{padding:70px 0;text-align:center}
+.jempty .big{font-family:"Libre Bodoni",serif;font-style:italic;font-size:clamp(24px,2.4vw,32px);margin-bottom:12px}
+.jempty p{font-weight:300;color:#555;font-size:14px}
+.jempty .btn{display:inline-block;padding:14px 40px;margin-top:28px}
+.jrow{display:grid;grid-template-columns:60px 1fr auto;gap:24px;align-items:baseline;width:100%;text-align:left;padding:30px 0;border-bottom:1px solid #e3e3e3;transition:padding .4s var(--ease)}
+.jrow.wimg{grid-template-columns:60px 1fr 160px auto;align-items:center}
+.jrow:hover{padding-left:10px}
+.jn{font-family:"Libre Bodoni",serif;font-size:22px;color:#999}
+.jm{display:flex;flex-direction:column;gap:8px}
+.jt{font-family:"Libre Bodoni",serif;font-size:clamp(22px,2.2vw,30px);line-height:1.15}
+.jx{font-size:14px;font-weight:300;color:#555;line-height:1.6;max-width:640px}
+.ji{aspect-ratio:4/3;overflow:hidden;border:1px solid #000;padding:4px}.ji img{width:100%;height:100%;object-fit:cover;display:block}
+.jr{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#777;white-space:nowrap}
+.jr i{font-style:normal;margin-left:8px;color:#000}
+.art{max-width:680px;margin:0 auto}
+.abar{display:flex;justify-content:space-between;align-items:baseline;gap:20px;margin-bottom:44px;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase}
+.abar .k{color:#777}
+.abar button{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase}
+.aimg{width:100%;margin-bottom:36px;display:block}
+.art h1{font-family:"Libre Bodoni",serif;font-weight:400;font-size:clamp(34px,4vw,54px);line-height:1.08;margin-bottom:22px}
+.art .ax{font-family:"Libre Bodoni",serif;font-style:italic;font-size:20px;color:#333;line-height:1.5;margin-bottom:34px}
+.art p{font-size:16.5px;line-height:1.85;font-weight:300;color:#222;margin-bottom:20px}
+.aorig{margin-top:44px;padding-top:18px;border-top:1px solid #000;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#777}
+footer{border-top:1px solid #000;margin:0 var(--pad);padding:22px 0 30px;display:flex;justify-content:space-between;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase}
+footer div{display:flex;gap:14px 30px;flex-wrap:wrap}
+footer a,footer span{white-space:nowrap}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.tile{opacity:1;transform:none}}
+
+@media (max-width:860px){
+  .journal{padding-top:30px}
+  .jrow,.jrow.wimg{grid-template-columns:1fr;gap:10px}
+  .jn{display:none}
+  .jhead{flex-direction:column-reverse;align-items:stretch}
+  .jhead button{align-self:flex-end}
+  .maison{grid-template-columns:1fr;padding-top:30px;gap:30px}
+  .mleft{position:static}
+  .names{gap:2px 22px}
+  .names i{display:none}
+  .nums{grid-template-columns:1fr 1fr 1fr;gap:12px}
+  .top .hide-m{display:none}
+  :root{--pad:18px}
+  .top{height:48px}
+  .top .hide-m{display:none}
+  .top nav{gap:14px}
+  .top nav>button,.top nav>a,.top nav>span{font-size:9.5px;letter-spacing:.12em}
+  .grid,body.open .grid{grid-template-columns:repeat(2,1fr);column-gap:14px;row-gap:30px}
+  .tile.off{margin-top:0}
+  .tile.m-off{margin-top:40px}
+  main,body.open main{grid-template-columns:1fr}
+  aside{position:fixed;inset:0;top:0;height:100vh;z-index:50;border:0}
+  .qv{grid-template-columns:1fr;grid-template-rows:52vh auto;overflow:auto}
+  .tx{padding:22px 20px 30px;overflow:visible}
+  .bar{margin-bottom:18px}
+  .page{padding:24px 20px 50px}
+  .steps{grid-template-columns:1fr}
+  .res{grid-template-columns:1fr}
+  .flow{flex-direction:column;align-items:stretch;gap:0}
+  .node{flex-direction:row;text-align:left;gap:14px}
+  .node b{margin-top:0;min-width:110px}
+  .node small{padding:0}
+  .arw{flex:0 0 22px;height:22px;width:58px}
+  .arw::before{left:50%;right:auto;top:0;bottom:4px;width:1px;height:auto}
+  .arw::after{left:calc(50% - 3px);right:auto;top:auto;bottom:3px;transform:rotate(135deg)}
+  .filters{gap:18px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  .filters::-webkit-scrollbar{display:none}
+  .filters button{white-space:nowrap}
+  footer{flex-direction:column;gap:16px}
+}
+</style>
+</head>
+<body>
+<header id="hd">
+  <div class="top">
+    <nav>
+      <button data-go="projets" class="on" data-t="projects"></button>
+      <button data-go="auto" data-t="automations"></button>
+      <button data-go="maison" data-t="maison" class="hide-m"></button>
+      <button data-go="journal" data-t="journal"></button>
+    </nav>
+    <nav>
+      <span class="hide-m">Paris</span>
+      <span class="lang"><button data-l="fr">FR</button><i>|</i><button data-l="en">EN</button></span>
+      <a href="https://betob.lovable.app/linkedin" target="_blank" rel="noopener" class="hide-m">LinkedIn</a>
+      <button class="av" id="av" data-go="maison"><img id="avimg" alt=""><em></em></button>
+    </nav>
+  </div>
+  <div class="wm" id="wm"><span>B</span><span>E</span><span>T</span><span>O</span><span>B</span></div>
+  <div class="sub" id="sub">Bélinda <i>to</i> Business</div>
+  <div class="rule"></div>
+</header>
+
+<main>
+  <div>
+    <div class="filters" id="filters"></div>
+    <section class="grid" id="grid"></section>
+  </div>
+  <aside id="panel"></aside>
+</main>
+
+<section class="maison" id="maison">
+  <div class="mleft">
+    <div class="ring"><img id="mphoto" alt=""><em></em></div>
+    <div class="k" data-t="maisonK"></div>
+    <h2 id="mh"></h2>
+    <a class="btn" href="https://betob.lovable.app/linkedin" target="_blank" rel="noopener" data-t="write"></a>
+    <div class="mail"><span data-t="orMail"></span><a href="mailto:belinda.betob@gmail.com">belinda.betob@gmail.com</a><button id="copy" data-t="copy"></button></div>
+  </div>
+  <div class="mright">
+    <div class="mbar" style="justify-content:flex-end"><button class="u" id="mclose" data-t="close"></button></div>
+    <p class="lead" data-t="m1"></p>
+    <p class="lead" data-t="m2"></p>
+    <div class="sec"><div class="k" data-t="numsK"></div><div class="nums" id="nums"></div></div>
+    <div class="sec"><div class="k" data-t="career"></div><div class="logos" id="logos"></div></div>
+    <div class="sec"><div class="k" data-t="toolsK"></div><div class="list" id="mtools" style="border-top:0;margin-top:0"></div></div>
+  </div>
+</section>
+
+<section class="journal" id="journal">
+  <div class="jhead"><div><h2 data-t="journalH"></h2><p data-t="journalP"></p></div><button class="u" id="jclose" data-t="close"></button></div>
+  <div id="jbody"></div>
+</section>
+
+<footer>
+  <span data-t="tagline"></span>
+  <div><a href="mailto:belinda.betob@gmail.com" style="text-transform:none;letter-spacing:.06em">belinda.betob@gmail.com</a><a href="https://betob.lovable.app/linkedin" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/Belindaca" target="_blank" rel="noopener">GitHub</a><span>© 2026</span></div>
+</footer>
+
+<script>
+const P = [
+ {
+  "id": "addecode",
+  "n": "Ad Decode",
+  "cat": "IA · Marketing",
+  "bg": "#26388f",
+  "url": "https://addecode.lovable.app",
+  "h": "La performance marketing, lue en un coup d'œil.",
+  "d": "Lire un tableau de bord publicitaire et en tirer les bonnes décisions demande du temps et de l'expérience. À partir d'une simple capture, l'IA d'Ad Decode pose un diagnostic, propose trois à cinq actions concrètes et rédige un message prêt à envoyer au client. Un outil né de mes années en AdTech.",
+  "s": [
+   "captures/addecode-1.jpg",
+   "captures/addecode-2.jpg",
+   "captures/addecode-3.jpg",
+   "captures/addecode-4.jpg"
+  ],
+  "host": "addecode.lovable.app",
+  "en": {
+   "cat": "AI · Marketing",
+   "h": "Marketing performance, decoded at a glance.",
+   "d": "Reading an ad dashboard and turning it into the right decisions takes time and experience. From a single screenshot, Ad Decode's AI delivers a diagnosis, three to five concrete next steps, and a message ready to send to the client. A tool born from my years in AdTech."
+  },
+  "tags": [
+   "ia"
+  ]
+ },
+ {
+  "id": "naipa",
+  "n": "Naipa",
+  "cat": "Finances personnelles",
+  "bg": "#efc6d6",
+  "url": "https://naipa.lovable.app",
+  "h": "Chaque achat évité est une victoire.",
+  "d": "Un achat évité ne laisse aucune trace, alors on oublie l'effort. Naipa le rend visible : tu photographies ce que tu n'as pas acheté, tu gardes ton argent, et tes victoires sont conservées et synchronisées sur tous tes appareils.",
+  "s": [
+   "captures/naipa-1.jpg",
+   "captures/naipa-2.jpg"
+  ],
+  "host": "naipa.lovable.app",
+  "en": {
+   "cat": "Personal finance",
+   "h": "Every purchase you skip is a win.",
+   "d": "A purchase you skip leaves no trace, so the effort is easily forgotten. Naipa makes it visible: snap a photo of what you didn't buy, keep your money, and your wins are saved and synced across all your devices."
+  },
+  "tags": [
+   "fin"
+  ]
+ },
+ {
+  "id": "brainshot",
+  "n": "Brainshot",
+  "cat": "Bien-être · TDAH",
+  "bg": "#7d2b25",
+  "url": "https://belindaca.github.io/socialboard/",
+  "h": "L'essentiel pour mieux vivre avec un TDAH.",
+  "d": "Les conseils sur le TDAH sont nombreux et dispersés. Brainshot rassemble des vidéos choisies et des cartes mémo à retourner : pourquoi les routines classiques échouent, comment s'organiser les jours sans énergie, repartir après un oubli et reconstruire l'estime de soi.",
+  "s": [
+   "captures/brainshot-1.jpg",
+   "captures/brainshot-2.jpg",
+   "captures/brainshot-3.jpg"
+  ],
+  "host": "belindaca.github.io/socialboard",
+  "en": {
+   "cat": "Wellbeing · ADHD",
+   "h": "The essentials for living better with ADHD.",
+   "d": "ADHD advice is everywhere and scattered. Brainshot brings together hand-picked videos and flip memo cards: why classic habit loops fail, how to get organized on low-energy days, how to restart after a miss and how to rebuild self-image."
+  },
+  "tags": [
+   "bien"
+  ]
+ },
+ {
+  "id": "spendless",
+  "n": "Spendlens",
+  "cat": "Finances · IA",
+  "bg": "#7d9a6e",
+  "url": "https://spendlessapp.lovable.app",
+  "h": "Moins deviner, mieux dépenser.",
+  "d": "On sait rarement où part vraiment son argent. Spendlens rend chaque achat rapide à enregistrer (photo, date, catégorie), puis révèle les habitudes de dépense sur un mois, un trimestre ou un an. Son Smart Coach, propulsé par l'IA, en tire des conseils et un budget adaptés.",
+  "s": [
+   "captures/spendless-1.jpg",
+   "captures/spendless-2.jpg"
+  ],
+  "host": "spendlessapp.lovable.app",
+  "en": {
+   "cat": "Finance · AI",
+   "h": "Less guesswork. Smarter spending.",
+   "d": "Few of us really know where our money goes. Spendlens makes every purchase quick to log (photo, date, category), then reveals spending patterns over a month, a quarter, or a year. Its AI-powered Smart Coach turns them into tailored advice and a budget."
+  },
+  "tags": [
+   "fin",
+   "ia"
+  ]
+ },
+ {
+  "id": "just-later",
+  "n": "Just Later",
+  "cat": "Bien-être numérique",
+  "bg": "#5a3fb0",
+  "url": "https://just-later.lovable.app",
+  "h": "Tu n'as pas le temps ? Tu viens d'en trouver.",
+  "d": "On ouvre TikTok par réflexe et l'heure file. Just Later s'interpose au bon moment : tu dis pourquoi, tu poses le téléphone, et l'app te propose une courte activité à la place (sport, skincare, cuisine), en comptant le temps récupéré.",
+  "s": [
+   "captures/just-later-1.jpg",
+   "captures/just-later-2.jpg",
+   "captures/just-later-3.jpg",
+   "captures/just-later-4.jpg"
+  ],
+  "host": "just-later.lovable.app",
+  "en": {
+   "cat": "Digital wellbeing",
+   "h": "No time? You just found some.",
+   "d": "We open TikTok on autopilot and an hour slips away. Just Later steps in at the right moment: say why, put your phone down, and the app suggests a short activity instead (exercise, skincare, cooking), while tracking the time you've reclaimed."
+  },
+  "tags": [
+   "bien"
+  ]
+ },
+ {
+  "id": "joingo",
+  "n": "Join&Go",
+  "cat": "Mobilité",
+  "bg": "#e3c9a6",
+  "url": "https://joingo.vercel.app",
+  "h": "Tout le monde arrive. Ensemble.",
+  "d": "Se retrouver à plusieurs quand chacun part d'un endroit différent, c'est souvent attendre sur un quai. Join&Go coordonne les trajets de chacun pour que tout le monde se rejoigne en chemin, au bon moment, avec le moins d'attente possible.",
+  "s": [
+   "captures/joingo-1.jpg",
+   "captures/joingo-2.jpg",
+   "captures/joingo-3.jpg"
+  ],
+  "host": "joingo.vercel.app",
+  "en": {
+   "cat": "Mobility",
+   "h": "Everyone gets there. Together.",
+   "d": "Meeting up as a group when everyone leaves from a different place often means waiting on a platform. Join&Go coordinates everyone's journey so the group meets along the way, at the right time, with as little waiting as possible."
+  },
+  "tags": [
+   "mob"
+  ]
+ },
+ {
+  "id": "rutth",
+  "n": "Rutth",
+  "cat": "Bien-être",
+  "bg": "#5c3a46",
+  "url": "https://rutth.vercel.app",
+  "h": "Ton rythme, en miroir.",
+  "d": "Sommeil, énergie, humeur, repas : nos rythmes nous échappent souvent. Rutth aide à les observer avec curiosité et douceur, jamais avec jugement, comme on regarde son reflet au bord d'une rivière.",
+  "s": [
+   "captures/rutth-1.jpg",
+   "captures/rutth-2.jpg",
+   "captures/rutth-3.jpg",
+   "captures/rutth-4.jpg"
+  ],
+  "host": "rutth.vercel.app",
+  "en": {
+   "cat": "Wellbeing",
+   "h": "Your rhythm, reflected.",
+   "d": "Sleep, energy, mood, meals: our rhythms often slip past us. Rutth helps you notice them with curiosity and kindness, never judgment, like watching your reflection by a river."
+  },
+  "tags": [
+   "bien"
+  ]
+ },
+ {
+  "id": "clerra-ai",
+  "n": "Clerra",
+  "cat": "Assistante IA",
+  "bg": "#a3195b",
+  "url": "https://clerra-ai.lovable.app",
+  "h": "Du chaos des idées à la clarté.",
+  "d": "Quand les idées s'accumulent, on ne sait plus par où commencer. Clerra, l'assistante IA des femmes créatives, aide à transformer ce chaos en clarté, en focus et en action.",
+  "s": [
+   "captures/clerra-ai-1.jpg",
+   "captures/clerra-ai-2.jpg",
+   "captures/clerra-ai-3.jpg"
+  ],
+  "host": "clerra-ai.lovable.app",
+  "en": {
+   "cat": "AI assistant",
+   "h": "From scattered ideas to clarity.",
+   "d": "When ideas pile up, it's hard to know where to start. Clerra, the AI assistant for creative women, helps turn that chaos into clarity, focus, and action."
+  },
+  "tags": [
+   "ia"
+  ]
+ },
+ {
+  "id": "adele",
+  "n": "Adele · 21",
+  "cat": "Code · HTML & CSS",
+  "bg": "#7d866c",
+  "url": "https://belindagit.github.io/album-adele/album-21.html",
+  "h": "La discographie d'Adele, codée à la main.",
+  "d": "Un site sur la discographie d'Adele, l'une de mes chanteuses préférées. Ici, la présentation de l'album 21, qui est aussi l'un de mes préférés. Réalisé en HTML et CSS pendant ma formation en développement web, sans outil d'IA.",
+  "s": [
+   "captures/adele-1.jpg",
+   "captures/adele-2.mp4",
+   "captures/adele-3.jpg",
+   "captures/adele-4.jpg"
+  ],
+  "host": "belindagit.github.io",
+  "tags": [
+   "code"
+  ],
+  "en": {
+   "cat": "Code · HTML & CSS",
+   "h": "Adele's discography, coded by hand.",
+   "d": "A site about Adele's discography, one of my favorite singers. Here, the page for the album 21, also one of my favorites. Built in HTML and CSS during my web development bootcamp, without any AI tools."
+  }
+ }
+];
+const PHOTO = "captures/portrait.jpg";
+const T = {
+ fr:{projects:"Projets",automations:"Automatisations",maison:"Portrait",tagline:"BetoB · De la stratégie au produit",
+   all:"Tous",ia:"IA",bien:"Bien-être",fin:"Finances",mob:"Mobilité",code:"Code",
+   close:"Fermer",discover:"Découvrir le projet",next:"Projet suivant",prev:"Précédente",nextShot:"Suivante",shot:"Capture",
+   autoK:"Automatisations IA",journal:"Journal",journalH:"Journal",journalP:"Mes idées sur l'IA, le produit et la façon de construire.",jSoon:"Les premiers textes arrivent bientôt.",jSoonP:"En attendant, retrouve mes publications sur LinkedIn.",read:"Lire",back:"Retour au journal",min:"min de lecture",orig:"Publié d'abord sur LinkedIn",orMail:"Ou par e-mail",copy:"Copier",copied:"Copié",result:"Résultat",autoH:"Deux automatisations<br><em>que j'utilise au quotidien.</em>",autoP:"Des règles simples d'abord, un modèle d'IA là où elles ne suffisent pas.",
+   maisonK:"Bélinda",maisonH:"De la stratégie <em>au produit.</em>",
+   m1:"Avant, je concevais des recommandations médias sur mesure pour chaque client. Aujourd'hui, je construis des produits avec l'IA, avec la même méthode : comprendre le contexte et les ambitions, lire les données et les enjeux.",
+   m2:"J'aime transformer une idée en produit qu'on a vraiment envie d'utiliser : simple, rapide, et soigné jusque dans les moindres détails.",
+   write:"Écrire sur LinkedIn",career:"Parcours",toolsK:"Les outils",numsK:"En chiffres",nums:[["5","ans en AdTech"],["30+","marchés accompagnés"],["8","projets construits avec l'IA"]],
+   brands:"<b>Luxe &amp; beauté</b><br>LVMH, Richemont, L'Oréal, Coty · plus de 30 marchés",
+   jobs:[["Snap","Global Account Manager","Stratégie média internationale, L'Oréal Global, P&G Europe"],["TikTok","Strategic Account Planner","Recommandations média et créateurs, marques luxe et beauté"],["Google France","Analytical Consultant","Performance marketing"]],
+   tools:["Prototypage et développement","Mise en ligne","Base de données et comptes","Développement assisté par IA","Assistant IA","L'IA de mes automatisations","Automatisations","Code source"]},
+ en:{projects:"Projects",automations:"Automations",maison:"Portrait",tagline:"BetoB · From strategy to product",
+   all:"All",ia:"AI",bien:"Wellbeing",fin:"Finance",mob:"Mobility",code:"Code",
+   close:"Close",discover:"Discover the project",next:"Next project",prev:"Previous",nextShot:"Next",shot:"Screen",
+   autoK:"AI automations",journal:"Journal",journalH:"Journal",journalP:"My thoughts on AI, product and how to build.",jSoon:"The first pieces are coming soon.",jSoonP:"In the meantime, find my posts on LinkedIn.",read:"Read",back:"Back to the journal",min:"min read",orig:"First published on LinkedIn",orMail:"Or by email",copy:"Copy",copied:"Copied",result:"Result",autoH:"Two automations<br><em>I use every day.</em>",autoP:"Simple rules first, an AI model only where rules fall short.",
+   maisonK:"Bélinda",maisonH:"From strategy <em>to product.</em>",
+   m1:"Before, I designed tailored media recommendations for each client. Today, I build products with AI, using the same method: understand the context and the ambitions, read the data and what's at stake.",
+   m2:"I love turning an idea into a product people genuinely want to use: simple, fast, and thoughtfully crafted down to the smallest detail.",
+   write:"Message me on LinkedIn",career:"Experience",toolsK:"The tools",numsK:"In numbers",nums:[["5","years in AdTech"],["30+","markets supported"],["8","products built with AI"]],
+   brands:"<b>Luxury &amp; beauty</b><br>LVMH, Richemont, L'Oréal, Coty · 30+ markets",
+   jobs:[["Snap","Global Account Manager","International media strategy, L'Oréal Global, P&G Europe"],["TikTok","Strategic Account Planner","Media and creator recommendations, luxury and beauty brands"],["Google France","Analytical Consultant","Performance marketing"]],
+   tools:["Prototyping & building","Deployment","Database & auth","AI-assisted coding","AI assistant","The AI in my automations","Automations","Source code"]}
+};
+const TOOLSVG=["<svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"currentColor\" aria-hidden=\"true\"><path clip-rule=\"evenodd\" d=\"M7.082 0c3.91 0 7.081 3.179 7.081 7.1v2.7h2.357c3.91 0 7.082 3.178 7.082 7.1 0 3.923-3.17 7.1-7.082 7.1H0V7.1C0 3.18 3.17 0 7.082 0z\" fill=\"url(#lobe-icons-lovable-_R_0_)\" fill-rule=\"evenodd\"></path><defs><radialGradient cx=\"0\" cy=\"0\" gradientTransform=\"matrix(-1 22.49999 -30.45394 -1.3535 14 3)\" gradientUnits=\"userSpaceOnUse\" id=\"lobe-icons-lovable-_R_0_\" r=\"1\"><stop offset=\".25\" stop-color=\"#FE7B02\"></stop><stop offset=\".433\" stop-color=\"#FE4230\"></stop><stop offset=\".548\" stop-color=\"#FE529A\"></stop><stop offset=\".654\" stop-color=\"#DD67EE\"></stop><stop offset=\".95\" stop-color=\"#4B73FF\"></stop></radialGradient></defs></svg>", "<svg fill-rule=\"evenodd\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M12 0l12 20.785H0L12 0z\"></path></svg>", "<svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M11.9 1.036c-.015-.986-1.26-1.41-1.874-.637L.764 12.05C-.33 13.427.65 15.455 2.409 15.455h9.579l.113 7.51c.014.985 1.259 1.408 1.873.636l9.262-11.653c1.093-1.375.113-3.403-1.645-3.403h-9.642z\"/></svg>", "<svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"currentColor\" aria-hidden=\"true\"><path clip-rule=\"evenodd\" d=\"M20.998 10.949H24v3.102h-3v3.028h-1.487V20H18v-2.921h-1.487V20H15v-2.921H9V20H7.488v-2.921H6V20H4.487v-2.921H3V14.05H0V10.95h3V5h17.998v5.949zM6 10.949h1.488V8.102H6v2.847zm10.51 0H18V8.102h-1.49v2.847z\" fill=\"#D97757\" fill-rule=\"evenodd\"></path></svg>", "<svg fill-rule=\"evenodd\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M9.205 8.658v-2.26c0-.19.072-.333.238-.428l4.543-2.616c.619-.357 1.356-.523 2.117-.523 2.854 0 4.662 2.212 4.662 4.566 0 .167 0 .357-.024.547l-4.71-2.759a.797.797 0 00-.856 0l-5.97 3.473zm10.609 8.8V12.06c0-.333-.143-.57-.429-.737l-5.97-3.473 1.95-1.118a.433.433 0 01.476 0l4.543 2.617c1.309.76 2.189 2.378 2.189 3.948 0 1.808-1.07 3.473-2.76 4.163zM7.802 12.703l-1.95-1.142c-.167-.095-.239-.238-.239-.428V5.899c0-2.545 1.95-4.472 4.591-4.472 1 0 1.927.333 2.712.928L8.23 5.067c-.285.166-.428.404-.428.737v6.898zM12 15.128l-2.795-1.57v-3.33L12 8.658l2.795 1.57v3.33L12 15.128zm1.796 7.23c-1 0-1.927-.332-2.712-.927l4.686-2.712c.285-.166.428-.404.428-.737v-6.898l1.974 1.142c.167.095.238.238.238.428v5.233c0 2.545-1.974 4.472-4.614 4.472zm-5.637-5.303l-4.544-2.617c-1.308-.761-2.188-2.378-2.188-3.948A4.482 4.482 0 014.21 6.327v5.423c0 .333.143.571.428.738l5.947 3.449-1.95 1.118a.432.432 0 01-.476 0zm-.262 3.9c-2.688 0-4.662-2.021-4.662-4.519 0-.19.024-.38.047-.57l4.686 2.71c.286.167.571.167.856 0l5.97-3.448v2.26c0 .19-.07.333-.237.428l-4.543 2.616c-.619.357-1.356.523-2.117.523zm5.899 2.83a5.947 5.947 0 005.827-4.756C22.287 18.339 24 15.84 24 13.296c0-1.665-.713-3.282-1.998-4.448.119-.5.19-.999.19-1.498 0-3.401-2.759-5.947-5.946-5.947-.642 0-1.26.095-1.88.31A5.962 5.962 0 0010.205 0a5.947 5.947 0 00-5.827 4.757C1.713 5.447 0 7.945 0 10.49c0 1.666.713 3.283 1.998 4.448-.119.5-.19 1-.19 1.499 0 3.401 2.759 5.946 5.946 5.946.642 0 1.26-.095 1.88-.309a5.96 5.96 0 004.162 1.713z\"></path></svg>", "<svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M20.616 10.835a14.147 14.147 0 01-4.45-3.001 14.111 14.111 0 01-3.678-6.452.503.503 0 00-.975 0 14.134 14.134 0 01-3.679 6.452 14.155 14.155 0 01-4.45 3.001c-.65.28-1.318.505-2.002.678a.502.502 0 000 .975c.684.172 1.35.397 2.002.677a14.147 14.147 0 014.45 3.001 14.112 14.112 0 013.679 6.453.502.502 0 00.975 0c.172-.685.397-1.351.677-2.003a14.145 14.145 0 013.001-4.45 14.113 14.113 0 016.453-3.678.503.503 0 000-.975 13.245 13.245 0 01-2.003-.678z\" fill=\"#3186FF\"></path><path d=\"M20.616 10.835a14.147 14.147 0 01-4.45-3.001 14.111 14.111 0 01-3.678-6.452.503.503 0 00-.975 0 14.134 14.134 0 01-3.679 6.452 14.155 14.155 0 01-4.45 3.001c-.65.28-1.318.505-2.002.678a.502.502 0 000 .975c.684.172 1.35.397 2.002.677a14.147 14.147 0 014.45 3.001 14.112 14.112 0 013.679 6.453.502.502 0 00.975 0c.172-.685.397-1.351.677-2.003a14.145 14.145 0 013.001-4.45 14.113 14.113 0 016.453-3.678.503.503 0 000-.975 13.245 13.245 0 01-2.003-.678z\" fill=\"url(#lobe-icons-gemini-0-_R_0_)\"></path><path d=\"M20.616 10.835a14.147 14.147 0 01-4.45-3.001 14.111 14.111 0 01-3.678-6.452.503.503 0 00-.975 0 14.134 14.134 0 01-3.679 6.452 14.155 14.155 0 01-4.45 3.001c-.65.28-1.318.505-2.002.678a.502.502 0 000 .975c.684.172 1.35.397 2.002.677a14.147 14.147 0 014.45 3.001 14.112 14.112 0 013.679 6.453.502.502 0 00.975 0c.172-.685.397-1.351.677-2.003a14.145 14.145 0 013.001-4.45 14.113 14.113 0 016.453-3.678.503.503 0 000-.975 13.245 13.245 0 01-2.003-.678z\" fill=\"url(#lobe-icons-gemini-1-_R_0_)\"></path><path d=\"M20.616 10.835a14.147 14.147 0 01-4.45-3.001 14.111 14.111 0 01-3.678-6.452.503.503 0 00-.975 0 14.134 14.134 0 01-3.679 6.452 14.155 14.155 0 01-4.45 3.001c-.65.28-1.318.505-2.002.678a.502.502 0 000 .975c.684.172 1.35.397 2.002.677a14.147 14.147 0 014.45 3.001 14.112 14.112 0 013.679 6.453.502.502 0 00.975 0c.172-.685.397-1.351.677-2.003a14.145 14.145 0 013.001-4.45 14.113 14.113 0 016.453-3.678.503.503 0 000-.975 13.245 13.245 0 01-2.003-.678z\" fill=\"url(#lobe-icons-gemini-2-_R_0_)\"></path><defs><linearGradient gradientUnits=\"userSpaceOnUse\" id=\"lobe-icons-gemini-0-_R_0_\" x1=\"7\" x2=\"11\" y1=\"15.5\" y2=\"12\"><stop stop-color=\"#08B962\"></stop><stop offset=\"1\" stop-color=\"#08B962\" stop-opacity=\"0\"></stop></linearGradient><linearGradient gradientUnits=\"userSpaceOnUse\" id=\"lobe-icons-gemini-1-_R_0_\" x1=\"8\" x2=\"11.5\" y1=\"5.5\" y2=\"11\"><stop stop-color=\"#F94543\"></stop><stop offset=\"1\" stop-color=\"#F94543\" stop-opacity=\"0\"></stop></linearGradient><linearGradient gradientUnits=\"userSpaceOnUse\" id=\"lobe-icons-gemini-2-_R_0_\" x1=\"3.5\" x2=\"17.5\" y1=\"13.5\" y2=\"12\"><stop stop-color=\"#FABC12\"></stop><stop offset=\".46\" stop-color=\"#FABC12\" stop-opacity=\"0\"></stop></linearGradient></defs></svg>", "<svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M12.363 2.54a3.136 3.136 0 0 0-.376.022 2.864 2.864 0 0 0-1.589.828c-.562.58-.82 1.115-.773 1.943-.01.264.193 1.023.272 1.274 1.115 3.546 2.09 6.75 3.26 10.279.08.246.168.486.267.72.02.047.035.046.048-.004.077-.297.174-.612.29-.945.894-2.576 1.772-5.14 2.633-7.696a.345.345 0 0 0 .004-.217 163.054 163.054 0 0 0-1.49-4.572 2.603 2.603 0 0 0-.704-.933c-.55-.46-1.166-.694-1.842-.7Zm9.078.117a2.734 2.734 0 0 0-2.878 1.828l-4.576 13.289a2.734 2.734 0 0 0 1.695 3.475l.12.04a2.734 2.734 0 0 0 3.475-1.694L23.85 6.307a2.734 2.734 0 0 0-1.695-3.476c-.233-.1-.506-.124-.716-.174ZM12.375 3.96a1.396 1.396 0 1 1 0 2.791 1.395 1.395 0 0 1 0-2.79zm8.809.07a1.402 1.402 0 1 1 0 2.803 1.402 1.402 0 0 1 0-2.803zM5.419 7.605a2.853 2.853 0 0 0-.468.052 2.683 2.683 0 0 0-1.337.627 2.62 2.62 0 0 0-.924 1.833 3.808 3.808 0 0 0 0 .648 2.52 2.52 0 0 0 .673 1.52c.221.238.465.454.732.648 3.043 2.21 6.08 4.43 9.108 6.664a.78.78 0 0 0 .158.089c.03-.043.032-.098.007-.167a17.409 17.409 0 0 0-.317-1.066 532.752 532.752 0 0 1-2.02-6.251 41.91 41.91 0 0 0-.497-1.477c-.967-.849-2.078-1.6-3.023-2.302A3.848 3.848 0 0 0 6.153 7.7a2.388 2.388 0 0 0-.734-.094Zm.02 1.424a1.398 1.398 0 1 1 0 2.796 1.398 1.398 0 0 1 0-2.796zm-2.458 6.792c-.733-.006-1.375.202-1.927.622a2.72 2.72 0 0 0-.95 1.45 2.78 2.78 0 0 0-.09 1.04 2.74 2.74 0 0 0 .695 1.583c.664.578 1.26.85 2 .945 1.42-.005 2.84-.012 4.262-.02h.418c2.277-.003 4.513-.002 6.706.003.148.005.28.003.392-.01.06-.005.091-.031.092-.077a10.656 10.656 0 0 0-.834-.653 488.746 488.746 0 0 1-6.57-4.815.236.236 0 0 0-.14-.047c-1.34-.003-2.691-.01-4.054-.02zm-.19 1.418a1.402 1.402 0 1 1 0 2.803 1.402 1.402 0 0 1 0-2.803zm13.874.002a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8z\"/></svg>", "<svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12\"/></svg>"];
+const COMP=[["Google", "<svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z\"/></svg>"], ["TikTok", "<svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z\"/></svg>"], ["Snap", "<svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M12.206.793c.99 0 4.347.276 5.93 3.821.529 1.193.403 3.219.299 4.847l-.003.06c-.012.18-.022.345-.03.51.075.045.203.09.401.09.3-.016.659-.12 1.033-.301.165-.088.344-.104.464-.104.182 0 .359.029.509.09.45.149.734.479.734.838.015.449-.39.839-1.213 1.168-.089.029-.209.075-.344.119-.45.135-1.139.36-1.333.81-.09.224-.061.524.12.868l.015.015c.06.136 1.526 3.475 4.791 4.014.255.044.435.27.42.509 0 .075-.015.149-.045.225-.24.569-1.273.988-3.146 1.271-.059.091-.12.375-.164.57-.029.179-.074.36-.134.553-.076.271-.27.405-.555.405h-.03c-.135 0-.313-.031-.538-.074-.36-.075-.765-.135-1.273-.135-.3 0-.599.015-.913.074-.6.104-1.123.464-1.723.884-.853.599-1.826 1.288-3.294 1.288-.06 0-.119-.015-.18-.015h-.149c-1.468 0-2.427-.675-3.279-1.288-.599-.42-1.107-.779-1.707-.884-.314-.045-.629-.074-.928-.074-.54 0-.958.089-1.272.149-.211.043-.391.074-.54.074-.374 0-.523-.224-.583-.42-.061-.192-.09-.389-.135-.567-.046-.181-.105-.494-.166-.57-1.918-.222-2.95-.642-3.189-1.226-.031-.063-.052-.15-.055-.225-.015-.243.165-.465.42-.509 3.264-.54 4.73-3.879 4.791-4.02l.016-.029c.18-.345.224-.645.119-.869-.195-.434-.884-.658-1.332-.809-.121-.029-.24-.074-.346-.119-1.107-.435-1.257-.93-1.197-1.273.09-.479.674-.793 1.168-.793.146 0 .27.029.383.074.42.194.789.3 1.104.3.234 0 .384-.06.465-.105l-.046-.569c-.098-1.626-.225-3.651.307-4.837C7.392 1.077 10.739.807 11.727.807l.419-.015h.06z\"/></svg>"]];
+/* JOURNAL : ajouter les articles ici.
+   {id:"slug", date:"2026-11-12", src:"linkedin"|"", img:"" (optionnel),
+    fr:{t:"Titre", x:"Chapeau", b:["Paragraphe 1","Paragraphe 2"]}, en:{...} } */
+const JOURNAL = [];
+const TOOLN=["Lovable","Vercel","Supabase","Claude Code","ChatGPT","Gemini","Google Apps Script","GitHub"];
+const AUTO = {"fr": [{"n": "Couleurs Agenda", "h": "Un agenda harmonisé, sans y toucher.", "d": "Mes séances de sport arrivent depuis Classpass, Bsport ou à la main, chacune avec sa couleur. Le script les remet toutes à la bonne couleur.", "flow": [["googlecalendar", "Événement", "ajouté ou modifié"], ["googleappsscript", "Mots-clés", "titres connus"], ["googlegemini", "Gemini", "titres inconnus seulement"], ["googlecalendar", "Couleur", "appliquée en secondes", "dots"]], "note": "Gemini ne reçoit que le titre de l'événement.", "legend": [["#9caf88", "Sport"], ["#b7a6d9", "Networking"]], "res": ["2 min", "gagnées à chaque fois", "Je me sens mieux organisée, je gagne 2 minutes à chaque fois."]}, {"n": "Suivi Candidatures", "h": "Mes candidatures se suivent toutes seules.", "d": "Je recopiais à la main chaque confirmation, refus ou invitation à un entretien dans un Google Sheet. Maintenant, tout se met à jour seul.", "flow": [["gmail", "Nouveaux mails", "deux fois par jour"], ["googlegemini", "Gemini", "type, entreprise, poste"], ["googlesheets", "Sheet", "ligne créée ou mise à jour"], ["gmail", "Mail", "rangé"]], "note": "Un statut ne recule jamais. Tout le lot part en une seule requête pour rester gratuit.", "res": ["1 h+", "par semaine pour mon upskilling en IA", "Suivi plus précis. 10 minutes gagnées par jour, plus d'1 heure par semaine dégagée pour développer mes skills en IA."]}], "en": [{"n": "Calendar Colors", "h": "A consistent calendar, hands-free.", "d": "My workouts land from Classpass, Bsport or manual entries, each with its own color. The script gives them all the right one.", "flow": [["googlecalendar", "Event", "added or changed"], ["googleappsscript", "Keywords", "known titles"], ["googlegemini", "Gemini", "unknown titles only"], ["googlecalendar", "Color", "applied within seconds", "dots"]], "note": "Gemini only ever sees the event title.", "legend": [["#9caf88", "Sport"], ["#b7a6d9", "Networking"]], "res": ["2 min", "saved every time", "I feel more organized, and I save 2 minutes every time."]}, {"n": "Job Application Tracker", "h": "My job applications track themselves.", "d": "I used to copy every confirmation, rejection or interview invite into a Google Sheet by hand. Now it updates itself.", "flow": [["gmail", "New emails", "twice a day"], ["googlegemini", "Gemini", "type, company, role"], ["googlesheets", "Sheet", "row added or updated"], ["gmail", "Email", "filed"]], "note": "A status never moves backwards. The whole batch goes out in a single request to stay free.", "res": ["1 h+", "a week for my AI upskilling", "More accurate tracking. 10 minutes saved a day, over an hour a week freed up to build my AI skills."]}]};
+const AICON = {"gmail": "<svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z\"/></svg>", "googleappsscript": "<svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M12.363 2.54a3.136 3.136 0 0 0-.376.022 2.864 2.864 0 0 0-1.589.828c-.562.58-.82 1.115-.773 1.943-.01.264.193 1.023.272 1.274 1.115 3.546 2.09 6.75 3.26 10.279.08.246.168.486.267.72.02.047.035.046.048-.004.077-.297.174-.612.29-.945.894-2.576 1.772-5.14 2.633-7.696a.345.345 0 0 0 .004-.217 163.054 163.054 0 0 0-1.49-4.572 2.603 2.603 0 0 0-.704-.933c-.55-.46-1.166-.694-1.842-.7Zm9.078.117a2.734 2.734 0 0 0-2.878 1.828l-4.576 13.289a2.734 2.734 0 0 0 1.695 3.475l.12.04a2.734 2.734 0 0 0 3.475-1.694L23.85 6.307a2.734 2.734 0 0 0-1.695-3.476c-.233-.1-.506-.124-.716-.174ZM12.375 3.96a1.396 1.396 0 1 1 0 2.791 1.395 1.395 0 0 1 0-2.79zm8.809.07a1.402 1.402 0 1 1 0 2.803 1.402 1.402 0 0 1 0-2.803zM5.419 7.605a2.853 2.853 0 0 0-.468.052 2.683 2.683 0 0 0-1.337.627 2.62 2.62 0 0 0-.924 1.833 3.808 3.808 0 0 0 0 .648 2.52 2.52 0 0 0 .673 1.52c.221.238.465.454.732.648 3.043 2.21 6.08 4.43 9.108 6.664a.78.78 0 0 0 .158.089c.03-.043.032-.098.007-.167a17.409 17.409 0 0 0-.317-1.066 532.752 532.752 0 0 1-2.02-6.251 41.91 41.91 0 0 0-.497-1.477c-.967-.849-2.078-1.6-3.023-2.302A3.848 3.848 0 0 0 6.153 7.7a2.388 2.388 0 0 0-.734-.094Zm.02 1.424a1.398 1.398 0 1 1 0 2.796 1.398 1.398 0 0 1 0-2.796zm-2.458 6.792c-.733-.006-1.375.202-1.927.622a2.72 2.72 0 0 0-.95 1.45 2.78 2.78 0 0 0-.09 1.04 2.74 2.74 0 0 0 .695 1.583c.664.578 1.26.85 2 .945 1.42-.005 2.84-.012 4.262-.02h.418c2.277-.003 4.513-.002 6.706.003.148.005.28.003.392-.01.06-.005.091-.031.092-.077a10.656 10.656 0 0 0-.834-.653 488.746 488.746 0 0 1-6.57-4.815.236.236 0 0 0-.14-.047c-1.34-.003-2.691-.01-4.054-.02zm-.19 1.418a1.402 1.402 0 1 1 0 2.803 1.402 1.402 0 0 1 0-2.803zm13.874.002a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8z\"/></svg>", "googlecalendar": "<svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M18.316 5.684H24v12.632h-5.684V5.684zM5.684 24h12.632v-5.684H5.684V24zM18.316 5.684V0H1.895A1.894 1.894 0 0 0 0 1.895v16.421h5.684V5.684h12.632zm-7.207 6.25v-.065c.272-.144.5-.349.687-.617s.279-.595.279-.982c0-.379-.099-.72-.3-1.025a2.05 2.05 0 0 0-.832-.714 2.703 2.703 0 0 0-1.197-.257c-.6 0-1.094.156-1.481.467-.386.311-.65.671-.793 1.078l1.085.452c.086-.249.224-.461.413-.633.189-.172.445-.257.767-.257.33 0 .602.088.816.264a.86.86 0 0 1 .322.703c0 .33-.12.589-.36.778-.24.19-.535.284-.886.284h-.567v1.085h.633c.407 0 .748.109 1.02.327.272.218.407.499.407.843 0 .336-.129.614-.387.832s-.565.327-.924.327c-.351 0-.651-.103-.897-.311-.248-.208-.422-.502-.521-.881l-1.096.452c.178.616.505 1.082.977 1.401.472.319.984.478 1.538.477a2.84 2.84 0 0 0 1.293-.291c.382-.193.684-.458.902-.794.218-.336.327-.72.327-1.149 0-.429-.115-.797-.344-1.105a2.067 2.067 0 0 0-.881-.689zm2.093-1.931l.602.913L15 10.045v5.744h1.187V8.446h-.827l-2.158 1.557zM22.105 0h-3.289v5.184H24V1.895A1.894 1.894 0 0 0 22.105 0zm-3.289 23.5l4.684-4.684h-4.684V23.5zM0 22.105C0 23.152.848 24 1.895 24h3.289v-5.184H0v3.289z\"/></svg>", "googlegemini": "<svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M11.04 19.32Q12 21.51 12 24q0-2.49.93-4.68.96-2.19 2.58-3.81t3.81-2.55Q21.51 12 24 12q-2.49 0-4.68-.93a12.3 12.3 0 0 1-3.81-2.58 12.3 12.3 0 0 1-2.58-3.81Q12 2.49 12 0q0 2.49-.96 4.68-.93 2.19-2.55 3.81a12.3 12.3 0 0 1-3.81 2.58Q2.49 12 0 12q2.49 0 4.68.96 2.19.93 3.81 2.55t2.55 3.81\"/></svg>", "googlesheets": "<svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M11.318 12.545H7.91v-1.909h3.41v1.91zM14.728 0v6h6l-6-6zm1.363 10.636h-3.41v1.91h3.41v-1.91zm0 3.273h-3.41v1.91h3.41v-1.91zM20.727 6.5v15.864c0 .904-.732 1.636-1.636 1.636H4.909a1.636 1.636 0 0 1-1.636-1.636V1.636C3.273.732 4.005 0 4.909 0h9.318v6.5h6.5zm-3.273 2.773H6.545v7.909h10.91v-7.91zm-6.136 4.636H7.91v1.91h3.41v-1.91z\"/></svg>"};
+
+let L="fr"; try{ L=localStorage.getItem("betob-lang")||"fr"; }catch(e){}
+let filter="all", cur=-1, shot=0, page=null;
+const t=k=>T[L][k];
+const pc=(p,k)=>L==="en"?p.en[k]:p[k];
+const isVid=u=>/^data:video|\.(mp4|webm)$/i.test(u);
+const pad=n=>String(n).padStart(2,"0");
+const grid=document.getElementById("grid"), panel=document.getElementById("panel"), hd=document.getElementById("hd"), fl=document.getElementById("filters");
+document.getElementById("avimg").src=PHOTO;
+const isLight=c=>{const h=c.replace("#","");const[r,g,b]=[0,2,4].map(i=>parseInt(h.substr(i,2),16));return (r*299+g*587+b*114)/1000>160};
+
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}}),{threshold:.08});
+
+function renderGrid(first){
+  grid.innerHTML=P.map((p,i)=>`<button class="tile" data-i="${i}"><div class="bg" style="--c:${p.bg}"><div class="fr"><img src="${p.s.find(u=>!isVid(u))}" alt="${p.n}"></div></div><span class="n">${p.n}</span><span class="c">${pc(p,"cat")}</span></button>`).join("");
+  grid.querySelectorAll(".tile").forEach(el=>{ el.onclick=()=>openProject(+el.dataset.i); });
+  applyFilter(first);
+}
+function applyFilter(first,anim=true){
+  const tiles=[...grid.querySelectorAll(".tile")]; let k=0;
+  const cols=matchMedia("(max-width:860px)").matches?2:(document.body.classList.contains("open")?3:4);
+  tiles.forEach((el,i)=>{
+    const show=filter==="all"||P[i].tags.includes(filter);
+    el.classList.toggle("gone",!show); el.classList.remove("off","tall","m-off");
+    if(show){
+      if(k%cols===1) el.classList.add("off");
+      if(k%3===1) el.classList.add("tall");
+      if(k%2===1) el.classList.add("m-off");
+      el.classList.toggle("active",i===cur);
+      if(anim){ el.classList.remove("in");
+      el.style.transitionDelay=((first?0.35:0)+Math.min(k,8)*0.07)+"s";
+      io.unobserve(el); requestAnimationFrame(()=>io.observe(el)); }
+      k++;
+    }
+  });
+}
+function renderFilters(){
+  const keys=["all","ia","bien","fin","mob","code"];
+  fl.innerHTML=keys.map(k=>`<button data-f="${k}" class="${k===filter?"on":""}">${t(k)}</button>`).join("");
+  fl.querySelectorAll("button").forEach(b=>b.onclick=()=>{filter=b.dataset.f; renderFilters(); applyFilter(false);});
+}
+function setNav(k){document.querySelectorAll("[data-go]").forEach(b=>b.classList.toggle("on",b.dataset.go===k&&!b.classList.contains("av")));}
+function syncHH(){document.documentElement.style.setProperty("--hh",hd.offsetHeight+"px");}
+
+function openProject(i,s=0){
+  hideMaison(); hideJournal();
+  cur=i; shot=s; page=null; const p=P[i];
+  const wasOpen=document.body.classList.contains("open");
+  document.body.classList.add("open"); setNav("projets");
+  grid.classList.add("dim");
+  applyFilter(false,false);
+  const light=isLight(p.bg);
+  panel.innerHTML=`<div class="qv">
+    <div class="vis ${light?"light":""}" style="background:${p.bg}">
+      <div class="track" id="track">${p.s.map((src,j)=>`<div class="slide">${isVid(src)?`<video src="${src}" autoplay muted loop playsinline preload="metadata"></video>`:`<img src="${src}" alt="${t("shot")} ${j+1} ${p.n}">`}</div>`).join("")}</div>
+      ${p.s.length>1?`<button class="arr prev" aria-label="${t("prev")}">←</button><button class="arr next" aria-label="${t("nextShot")}">→</button>`:""}
+      <span class="cnt">${pad(shot+1)} / ${pad(p.s.length)}</span>
+    </div>
+    <div class="tx">
+      <div class="bar pbar"><span class="k">${pc(p,"cat")}</span><button class="u" id="close">${t("close")}</button></div>
+      <h2>${pc(p,"h")}</h2>
+      <p>${pc(p,"d")}</p>
+      ${p.s.length>1?`<div class="sw">${p.s.map((src,j)=>`<button data-s="${j}" class="${j===shot?"on":""}" aria-label="${t("shot")} ${j+1}"><i></i></button>`).join("")}</div>`:""}
+      <a class="btn" href="${p.url}" target="_blank" rel="noopener">${t("discover")}</a>
+      <button class="lk u" id="nextp">${t("next")}</button>
+      <div class="meta"><span>${p.n}</span><span>${p.url.includes("vercel")?"Vercel":p.url.includes("github.io")?"GitHub Pages":"Lovable"}</span></div>
+    </div></div>`;
+  panel.querySelector("#close").onclick=closePanel;
+  panel.querySelector("#nextp").onclick=()=>openProject((i+1)%P.length);
+  panel.querySelectorAll(".sw button").forEach(b=>b.onclick=()=>setShot(+b.dataset.s));
+  const pv=panel.querySelector(".prev"), nx=panel.querySelector(".next");
+  if(pv){pv.onclick=()=>setShot((shot-1+p.s.length)%p.s.length,-1); nx.onclick=()=>setShot((shot+1)%p.s.length,1);}
+  bindTrack();
+  syncHH();
+}
+function setShot(s,dir,instant){
+  const tr=panel.querySelector("#track"); if(!tr) return;
+  shot=s; tr.scrollTo({left:s*tr.clientWidth,behavior:instant?"auto":"smooth"}); markShot();
+}
+function markShot(){
+  const p=P[cur]; if(!p) return;
+  const c=panel.querySelector(".cnt"); if(c) c.textContent=`${pad(shot+1)} / ${pad(p.s.length)}`;
+  panel.querySelectorAll(".sw button").forEach((b,j)=>b.classList.toggle("on",j===shot));
+}
+function bindTrack(){
+  const tr=panel.querySelector("#track"); if(!tr) return;
+  if(shot) requestAnimationFrame(()=>tr.scrollTo({left:shot*tr.clientWidth}));
+  let raf=0;
+  tr.addEventListener("scroll",()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{
+    const i=Math.round(tr.scrollLeft/tr.clientWidth); if(i!==shot){shot=i;markShot();}
+  });},{passive:true});
+}
+function closePanel(){
+  if(!document.body.classList.contains("open")) return;
+  document.body.classList.remove("open"); cur=-1; page=null; setNav("projets");
+  grid.classList.remove("dim"); applyFilter(false,false);
+}
+function renderMaison(){
+  document.getElementById("mh").innerHTML=t("maisonH");
+  document.getElementById("nums").innerHTML=t("nums").map(n=>`<div><b>${n[0]}</b><span>${n[1]}</span></div>`).join("");
+  document.getElementById("mtools").innerHTML=TOOLN.map((n,i)=>`<div><span class="tl">${TOOLSVG[i]}${n}</span><span>${t("tools")[i]}</span></div>`).join("");
+  document.getElementById("logos").innerHTML=COMP.map(c=>`<span title="${c[0]}">${c[1]}<small>${c[0]}</small></span>`).join("");
+}
+function fmtDate(d){try{return new Date(d).toLocaleDateString(L==="en"?"en-GB":"fr-FR",{day:"numeric",month:"long",year:"numeric"});}catch(e){return d;}}
+function jt(a){return a[L]||a.fr;}
+function readTime(a){const w=jt(a).b.join(" ").split(/\s+/).length;return Math.max(1,Math.round(w/220));}
+function renderJournal(id){
+  const jb=document.getElementById("jbody");
+  const a=id&&JOURNAL.find(x=>x.id===id);
+  document.querySelector(".jhead").style.display=a?"none":"";
+  if(a){ const c=jt(a);
+    jb.innerHTML=`<article class="art">
+      <div class="abar"><button class="u" id="jback">← ${t("back")}</button><span class="k">${fmtDate(a.date)} · ${readTime(a)} ${t("min")}</span></div>
+      ${a.img?`<img class="aimg" src="${a.img}" alt="">`:""}
+      <h1>${c.t}</h1>${c.x?`<p class="ax">${c.x}</p>`:""}
+      ${c.b.map(p=>`<p>${p}</p>`).join("")}
+      ${a.src==="linkedin"?`<div class="aorig">${t("orig")}</div>`:""}
+    </article>`;
+    document.getElementById("jback").onclick=()=>{renderJournal();window.scrollTo({top:0});};
+    return;
+  }
+  if(!JOURNAL.length){
+    jb.innerHTML=`<div class="jempty"><p class="big">${t("jSoon")}</p><p>${t("jSoonP")}</p><a class="btn" href="https://betob.lovable.app/linkedin" target="_blank" rel="noopener">LinkedIn</a></div>`;
+    return;
+  }
+  const list=[...JOURNAL].sort((x,y)=>y.date.localeCompare(x.date));
+  jb.innerHTML=`<div class="jlist">${list.map((a,i)=>{const c=jt(a);return `<button class="jrow${a.img?" wimg":""}" data-j="${a.id}">
+      <span class="jn">${pad(list.length-i)}</span>
+      <span class="jm"><span class="k">${fmtDate(a.date)}</span><span class="jt">${c.t}</span>${c.x?`<span class="jx">${c.x}</span>`:""}</span>
+      ${a.img?`<span class="ji"><img src="${a.img}" alt=""></span>`:""}
+      <span class="jr">${readTime(a)} ${t("min")} <i>→</i></span></button>`}).join("")}</div>`;
+  jb.querySelectorAll(".jrow").forEach(r=>r.onclick=()=>{renderJournal(r.dataset.j);window.scrollTo({top:0});});
+}
+function showJournal(){
+  hideMaison(); closePanel(); page="journal"; document.body.classList.add("jpage"); setNav("journal");
+  renderJournal(); window.scrollTo({top:0}); syncHH();
+}
+function hideJournal(){
+  if(!document.body.classList.contains("jpage")) return;
+  document.body.classList.remove("jpage"); page=null; setNav("projets");
+  grid.querySelectorAll(".tile").forEach(el=>el.classList.add("in"));
+}
+function showMaison(){
+  hideJournal();
+  closePanel(); page="maison"; document.body.classList.add("mpage"); setNav("maison");
+  renderMaison(); window.scrollTo({top:0}); syncHH();
+}
+function hideMaison(){
+  if(!document.body.classList.contains("mpage")) return;
+  document.body.classList.remove("mpage"); page=null; setNav("projets");
+  grid.querySelectorAll(".tile").forEach(el=>el.classList.add("in"));
+}
+function openPage(kind){
+  if(kind==="maison") return showMaison();
+  if(kind==="journal") return showJournal();
+  hideMaison(); hideJournal();
+  const wasOpen=document.body.classList.contains("open");
+  cur=-1; page=kind; document.body.classList.add("open"); setNav(kind);
+  grid.classList.remove("dim"); applyFilter(false,false);
+  const bar=`<div class="bar" style="justify-content:flex-end"><button class="u" id="close">${t("close")}</button></div>`;
+  panel.innerHTML = kind==="auto" ? `<div class="page">${bar}
+      <h2 style="margin-top:0">${t("autoH")}</h2><p>${t("autoP")}</p>
+      ${AUTO[L].map((a,i)=>`<div class="auto"><div class="k">${pad(i+1)}</div><h3>${a.n}</h3><div class="hd">${a.h}</div><p>${a.d}</p>
+        <div class="flow">${a.flow.map((f,j)=>`${j?'<span class="arw"></span>':''}<div class="node"><div class="ico">${AICON[f[0]]}${f[3]==="dots"?`<span class="dots">${a.legend.map(c=>`<i style="background:${c[0]}"></i>`).join("")}</span>`:""}</div><b>${f[1]}</b><small>${f[2]}</small></div>`).join("")}</div>
+        ${a.legend?`<div class="legend">${a.legend.map(c=>`<span><i style="background:${c[0]}"></i>${c[1]}</span>`).join("")}</div>`:""}
+        <div class="note">${a.note}</div><div class="res"><div class="rk">${t("result")}</div><div class="rn"><b>${a.res[0]}</b><span>${a.res[1]}</span></div><p>${a.res[2]}</p></div></div>`).join("")}
+    </div>` : `<div class="qv">
+      <div class="vis portrait"><img src="${PHOTO}" alt=""></div>
+      <div class="tx">${bar}
+      <div class="k">${t("maisonK")}</div><h2>${t("maisonH")}</h2>
+      <p>${t("m1")}</p><p style="margin-top:12px">${t("m2")}</p>
+      <a class="btn" href="https://betob.lovable.app/linkedin" target="_blank" rel="noopener">${t("write")}</a>
+      <div class="k" style="margin-top:34px">${t("career")}</div>
+      <div class="list career">${t("jobs").map(j=>`<div><b>${j[0]}<span>${j[1]}</span></b><small>${j[2]}</small></div>`).join("")}</div>
+      <div class="brands">${t("brands")}</div>
+      <div class="k" style="margin-top:34px">${t("toolsK")}</div>
+      <div class="list">${TOOLN.map((n,i)=>`<div><span>${n}</span><span>${t("tools")[i]}</span></div>`).join("")}</div>
+    </div></div>`;
+  panel.querySelector("#close").onclick=closePanel;
+  syncHH();
+}
+function setLang(l){
+  L=l; try{localStorage.setItem("betob-lang",l);}catch(e){}
+  document.documentElement.lang=l;
+  document.querySelectorAll("[data-t]").forEach(el=>el.textContent=t(el.dataset.t));
+  document.querySelectorAll("[data-l]").forEach(b=>b.classList.toggle("cur",b.dataset.l===l));
+  document.getElementById("av").setAttribute("aria-label",t("maison"));
+  renderFilters();
+  grid.querySelectorAll(".tile").forEach((el,i)=>el.querySelector(".c").textContent=pc(P[i],"cat"));
+  renderMaison(); if(page=="journal") renderJournal();
+  if(cur>=0) openProject(cur,shot); else if(page==="auto") openPage("auto");
+}
+document.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>setLang(b.dataset.l));
+document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{
+  const k=b.dataset.go;
+  if(k==="projets"){ hideMaison(); hideJournal(); closePanel(); window.scrollTo({top:0,behavior:"smooth"}); }
+  else openPage(k);
+});
+document.getElementById("mphoto").src=PHOTO;
+document.getElementById("copy").onclick=async e=>{const b=e.currentTarget;try{await navigator.clipboard.writeText("belinda.betob@gmail.com");b.textContent=t("copied");setTimeout(()=>b.textContent=t("copy"),1600);}catch(err){}};
+document.getElementById("jclose").onclick=()=>{hideJournal(); window.scrollTo({top:0});};
+document.getElementById("mclose").onclick=()=>{hideMaison(); window.scrollTo({top:0});};
+document.getElementById("wm").onclick=()=>{hideMaison();hideJournal();closePanel();window.scrollTo({top:0,behavior:"smooth"});};
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){ hideMaison(); hideJournal(); closePanel(); }
+  if(cur>=0 && e.key==="ArrowRight") setShot((shot+1)%P[cur].s.length,1);
+  if(cur>=0 && e.key==="ArrowLeft") setShot((shot-1+P[cur].s.length)%P[cur].s.length,-1);
+});
+let small=false;
+function setPad(){
+  const els=[hd,...hd.querySelectorAll(".wm,.sub")];
+  els.forEach(e=>e.style.transition="none");
+  const was=hd.classList.contains("small"); hd.classList.remove("small");
+  document.body.style.paddingTop=hd.offsetHeight+"px";
+  if(was) hd.classList.add("small");
+  void hd.offsetHeight; els.forEach(e=>e.style.transition="");
+  syncHH();
+}
+addEventListener("scroll",()=>{
+  const y=scrollY, s=small?y>20:y>90;
+  if(s!==small){small=s; hd.classList.toggle("small",s); setTimeout(syncHH,380);}
+},{passive:true});
+document.fonts&&document.fonts.ready.then(setPad);
+let rz; addEventListener("resize",()=>{setPad(); clearTimeout(rz); rz=setTimeout(()=>applyFilter(false,false),200);});
+
+if(matchMedia("(min-width:861px)").matches){ cur=0; document.body.classList.add("open"); grid.classList.add("dim"); }
+renderGrid(true);
+setLang(L);
+setPad();
+</script>
+</body>
+</html>
