@@ -87,8 +87,8 @@ body.open aside{display:block}
 .track{position:absolute;inset:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
 .track::-webkit-scrollbar{display:none}
 .slide{flex:0 0 100%;height:100%;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;scroll-snap-stop:always}
-.slide video{max-height:78%;max-width:90%;box-shadow:0 30px 40px -20px rgba(0,0,0,.6);display:block}
-.slide img{max-height:78%;max-width:66%;box-shadow:0 30px 40px -20px rgba(0,0,0,.6);user-select:none;-webkit-user-drag:none}
+.slide video{max-height:calc(78vh - 150px);max-width:90%;box-shadow:0 30px 40px -20px rgba(0,0,0,.6);display:block}
+.slide img{max-height:calc(78vh - 150px);max-width:66%;box-shadow:0 30px 40px -20px rgba(0,0,0,.6);user-select:none;-webkit-user-drag:none}
 .vis .arr,.vis .cnt{z-index:2}
 .vis .cnt{position:absolute;left:20px;bottom:18px;font-size:10px;letter-spacing:.16em;color:rgba(255,255,255,.85)}
 .vis.light .cnt{color:rgba(0,0,0,.6)}
@@ -227,6 +227,7 @@ footer a,footer span{white-space:nowrap}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.tile{opacity:1;transform:none}}
 
 @media (max-width:860px){
+  .slide img,.slide video{max-height:78%}
   .journal{padding-top:30px}
   .jrow,.jrow.wimg{grid-template-columns:1fr;gap:10px}
   .jn{display:none}
