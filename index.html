@@ -22,7 +22,7 @@
 :root{--pad:40px;--panel:min(700px,50vw);--ease:cubic-bezier(.2,.7,.2,1)}
 html{scroll-behavior:smooth}
 html,body{overflow-x:clip}
-body{background:#fff;color:#000;font-family:Jost,sans-serif;font-weight:400;-webkit-font-smoothing:antialiased}
+body{transition:padding-top .35s ease;background:#fff;color:#000;font-family:Jost,sans-serif;font-weight:400;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .u{text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:1px}
@@ -782,20 +782,30 @@ document.addEventListener("keydown",e=>{
   if(cur>=0 && e.key==="ArrowRight") setShot((shot+1)%P[cur].s.length,1);
   if(cur>=0 && e.key==="ArrowLeft") setShot((shot-1+P[cur].s.length)%P[cur].s.length,-1);
 });
-let small=false;
+let small=false, fullH=0, smallH=0;
+const desk=()=>matchMedia("(min-width:861px)").matches;
 function setPad(){
   const els=[hd,...hd.querySelectorAll(".wm,.sub")];
   els.forEach(e=>e.style.transition="none");
-  const was=hd.classList.contains("small"); hd.classList.remove("small");
-  document.body.style.paddingTop=hd.offsetHeight+"px";
-  if(was) hd.classList.add("small");
+  const was=hd.classList.contains("small");
+  hd.classList.remove("small"); fullH=hd.offsetHeight;
+  hd.classList.add("small"); smallH=hd.offsetHeight;
+  hd.classList.toggle("small",was);
   void hd.offsetHeight; els.forEach(e=>e.style.transition="");
-  syncHH();
+  applyHeader(true);
 }
-addEventListener("scroll",()=>{
-  const y=scrollY, s=small?y>20:y>90;
-  if(s!==small){small=s; hd.classList.toggle("small",s); setTimeout(syncHH,380);}
-},{passive:true});
+function applyHeader(force){
+  const lock=desk()&&document.body.classList.contains("open");
+  const y=scrollY, s=lock||(small?y>20:y>90);
+  if(s!==small||force){
+    small=s; hd.classList.toggle("small",s);
+    document.body.style.paddingTop=(lock?smallH:fullH)+"px";
+    setTimeout(syncHH,380);
+  }
+  if(lock) document.documentElement.style.setProperty("--hh",smallH+"px");
+}
+addEventListener("scroll",()=>applyHeader(),{passive:true});
+new MutationObserver(()=>applyHeader(true)).observe(document.body,{attributes:true,attributeFilter:["class"]});
 document.fonts&&document.fonts.ready.then(setPad);
 let rz; addEventListener("resize",()=>{setPad(); clearTimeout(rz); rz=setTimeout(()=>applyFilter(false,false),200);});
 
