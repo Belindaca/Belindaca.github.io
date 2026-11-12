@@ -787,7 +787,6 @@ addEventListener("scroll",()=>{
 document.fonts&&document.fonts.ready.then(setPad);
 let rz; addEventListener("resize",()=>{setPad(); clearTimeout(rz); rz=setTimeout(()=>applyFilter(false,false),200);});
 
-if(matchMedia("(min-width:861px)").matches){ cur=0; document.body.classList.add("open"); grid.classList.add("dim"); }
 renderGrid(true);
 setLang(L);
 setPad();
