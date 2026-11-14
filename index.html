@@ -327,7 +327,7 @@ footer a,footer span{white-space:nowrap}
 </footer>
 
 <script>
-const P = [
+const P_ALL = [
  {
   "id": "addecode",
   "n": "Ad Decode",
@@ -517,6 +517,7 @@ const P = [
  },
  {
   "id": "adele",
+  "hidden": true,
   "n": "Adele · 21",
   "cat": "Code · HTML & CSS",
   "bg": "#7d866c",
@@ -540,6 +541,7 @@ const P = [
   }
  }
 ];
+const P = P_ALL.filter(p=>!p.hidden);
 const PHOTO = "captures/portrait.jpg";
 const T = {
  fr:{projects:"Projets",automations:"Automatisations",maison:"Portrait",tagline:"BetoB · De la stratégie au produit",
@@ -611,7 +613,7 @@ function applyFilter(first,anim=true){
   });
 }
 function renderFilters(){
-  const keys=["all","ia","bien","fin","mob","code"];
+  const keys=["all","ia","bien","fin","mob","code"].filter(k=>k==="all"||P.some(p=>p.tags.includes(k)));
   fl.innerHTML=keys.map(k=>`<button data-f="${k}" class="${k===filter?"on":""}">${t(k)}</button>`).join("");
   fl.querySelectorAll("button").forEach(b=>b.onclick=()=>{filter=b.dataset.f; renderFilters(); applyFilter(false);});
 }
