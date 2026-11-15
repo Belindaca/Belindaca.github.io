@@ -728,7 +728,7 @@ function renderMaison(){
   document.getElementById("nums").innerHTML=t("nums").map(n=>`<div><b>${n[0]}</b><span>${n[1]}</span></div>`).join("");
   document.getElementById("mtools").innerHTML=TOOLN.map((n,i)=>`<div><span class="tl">${lg(TOOLSVG[i],TOOLC[i])}${n}</span><span>${t("tools")[i]}</span></div>`).join("");
   document.getElementById("logos").innerHTML=COMP.map(c=>`<span>${lg(c[1],c[2])}<small>${c[0]}</small></span>`).join("");
-  if(matchMedia("(hover: none)").matches){const io=new IntersectionObserver(es=>es.forEach(x=>x.target.classList.toggle("lit",x.isIntersecting)),{rootMargin:"-40% 0px -40% 0px"});document.querySelectorAll("#mtools > div, #logos > span").forEach(el=>io.observe(el));}
+  {const io=new IntersectionObserver(es=>es.forEach(x=>x.target.classList.toggle("lit",x.isIntersecting)),{rootMargin:"-40% 0px -40% 0px"});document.querySelectorAll("#mtools > div, #logos > span").forEach(el=>io.observe(el));}
 }
 function fmtDate(d){try{return new Date(d).toLocaleDateString(L==="en"?"en-GB":"fr-FR",{day:"numeric",month:"long",year:"numeric"});}catch(e){return d;}}
 function jt(a){return a[L]||a.fr;}
@@ -805,7 +805,7 @@ function openPage(kind){
       <div class="k" style="margin-top:34px">${t("toolsK")}</div>
       <div class="list">${TOOLN.map((n,i)=>`<div><span>${n}</span><span>${t("tools")[i]}</span></div>`).join("")}</div>
     </div></div>`;
-  if(matchMedia("(hover: none)").matches){const io2=new IntersectionObserver(es=>es.forEach(x=>x.target.classList.toggle("lit",x.isIntersecting)),{rootMargin:"-40% 0px -40% 0px"});document.querySelectorAll(".node").forEach(el=>io2.observe(el));}
+  {const io2=new IntersectionObserver(es=>es.forEach(x=>x.target.classList.toggle("lit",x.isIntersecting)),{rootMargin:"-40% 0px -40% 0px"});document.querySelectorAll(".node").forEach(el=>io2.observe(el));}
   panel.querySelector("#close").onclick=closePanel;
   syncHH();
 }
