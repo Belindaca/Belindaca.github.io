@@ -127,6 +127,14 @@ body.open aside{display:block}
 .steps b{display:block;font-family:"Libre Bodoni",serif;font-weight:400;font-size:18px;margin-bottom:4px}
 .ashots{display:flex;gap:12px;overflow-x:auto;margin:18px 0 4px;padding-bottom:6px;scrollbar-width:none}
 .ashots::-webkit-scrollbar{display:none}
+.ashots img{cursor:zoom-in}
+.lb{position:fixed;inset:0;z-index:999;background:rgba(15,15,15,.88);display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:5vh 4vw;cursor:zoom-out}
+.lb.on{display:flex}
+.lb img{max-width:92vw;max-height:90vh;margin:auto;border-radius:16px;box-shadow:0 30px 60px -20px rgba(0,0,0,.6);cursor:default}
+.lb img.long{max-height:none;width:min(440px,92vw)}
+.lb button{position:fixed;background:none;border:0;color:#fff;font:300 15px/1 inherit;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;padding:14px}
+.lb .x{top:10px;right:14px}.lb .pv{left:6px;top:50%}.lb .nx{right:6px;top:50%}
+@media(max-width:860px){.lb .pv,.lb .nx{display:none}}
 .ashots img{height:300px;width:auto;flex:0 0 auto;border:1px solid #e5e5e5;border-radius:14px;box-shadow:0 14px 22px -14px rgba(0,0,0,.35)}
 .ico svg{max-width:24px}
 .flow{display:flex;align-items:flex-start;margin:22px 0 6px}
@@ -743,7 +751,7 @@ function openPage(kind){
   const bar=`<div class="bar" style="justify-content:flex-end"><button class="u" id="close">${t("close")}</button></div>`;
   panel.innerHTML = kind==="auto" ? `<div class="page">${bar}
       <h2 style="margin-top:0">${t("autoH")}</h2><p>${t("autoP")}</p>
-      ${AUTO[L].filter(a=>!a.hidden).map((a,i)=>`<div class="auto"><div class="k">${pad(i+1)}</div><h3>${a.n}</h3><div class="hd">${a.h}</div><p>${a.d}</p>${a.shots?`<div class="ashots">${a.shots.map(u=>`<img src="${u}" alt="${a.n}" loading="lazy">`).join("")}</div>`:""}
+      ${AUTO[L].filter(a=>!a.hidden).map((a,i)=>`<div class="auto"><div class="k">${pad(i+1)}</div><h3>${a.n}</h3><div class="hd">${a.h}</div><p>${a.d}</p>${a.shots?`<div class="ashots">${a.shots.map(u=>`<img src="${u}" data-full="${u.endsWith(".gif")?u.replace(".gif","-full.jpg"):u}" alt="${a.n}" loading="lazy">`).join("")}</div>`:""}
         <div class="flow">${a.flow.map((f,j)=>`${j?'<span class="arw"></span>':''}<div class="node"><div class="ico">${AICON[f[0]]}${f[3]==="dots"?`<span class="dots">${a.legend.map(c=>`<i style="background:${c[0]}"></i>`).join("")}</span>`:""}</div><b>${f[1]}</b><small>${f[2]}</small></div>`).join("")}</div>
         ${a.legend?`<div class="legend">${a.legend.map(c=>`<span><i style="background:${c[0]}"></i>${c[1]}</span>`).join("")}</div>`:""}
         <div class="note">${a.note}</div><div class="res"><div class="rk">${t("result")}</div><div class="rn"><b>${a.res[0]}</b><span>${a.res[1]}</span></div><p>${a.res[2]}</p></div></div>`).join("")}
@@ -785,6 +793,7 @@ document.getElementById("jclose").onclick=()=>{hideJournal(); window.scrollTo({t
 document.getElementById("mclose").onclick=()=>{hideMaison(); window.scrollTo({top:0});};
 document.getElementById("wm").onclick=()=>{hideMaison();hideJournal();closePanel();window.scrollTo({top:0,behavior:"smooth"});};
 document.addEventListener("keydown",e=>{
+  if(window.lbOpen&&lbOpen()){ if(e.key==="Escape")lbClose(); if(e.key==="ArrowRight")lbStep(1); if(e.key==="ArrowLeft")lbStep(-1); return; }
   if(e.key==="Escape"){ hideMaison(); hideJournal(); closePanel(); }
   if(cur>=0 && e.key==="ArrowRight") setShot((shot+1)%P[cur].s.length,1);
   if(cur>=0 && e.key==="ArrowLeft") setShot((shot-1+P[cur].s.length)%P[cur].s.length,-1);
@@ -819,6 +828,17 @@ let rz; addEventListener("resize",()=>{setPad(); clearTimeout(rz); rz=setTimeout
 renderGrid(true);
 setLang(L);
 setPad();
+</script>
+<div class="lb" id="lb"><button class="x" aria-label="Fermer">✕</button><button class="pv" aria-label="Précédente">←</button><img alt=""><button class="nx" aria-label="Suivante">→</button></div>
+<script>
+(()=>{const lb=document.getElementById("lb"),im=lb.querySelector("img");let list=[],k=0;
+const show=()=>{const t=list[k];im.src=t.dataset.full;im.alt=t.alt;im.className=t.dataset.full!==t.getAttribute("src")?"long":"";lb.scrollTop=0;const m=list.length>1;lb.querySelector(".pv").style.visibility=lb.querySelector(".nx").style.visibility=m?"visible":"hidden";};
+window.lbOpen=()=>lb.classList.contains("on");
+window.lbClose=()=>{lb.classList.remove("on");document.documentElement.style.overflow="";};
+window.lbStep=d=>{k=(k+d+list.length)%list.length;show();};
+document.addEventListener("click",e=>{const t=e.target.closest(".ashots img");if(t){list=[...t.parentNode.querySelectorAll("img")];k=list.indexOf(t);show();lb.classList.add("on");document.documentElement.style.overflow="hidden";}});
+lb.addEventListener("click",e=>{if(e.target.closest(".pv"))return lbStep(-1);if(e.target.closest(".nx"))return lbStep(1);if(e.target!==im)lbClose();});
+})();
 </script>
 </body>
 </html>
