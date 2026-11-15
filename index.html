@@ -142,6 +142,9 @@ body.open aside{display:block}
 .ashots img{cursor:zoom-in}
 .lb{position:fixed;inset:0;z-index:999;background:rgba(15,15,15,.88);display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:5vh 4vw;cursor:zoom-out}
 .lb.on{display:flex}
+.lb .lbd{position:fixed;left:0;right:0;bottom:22px;display:flex;justify-content:center;gap:8px;pointer-events:none}
+.lb .lbd i{width:18px;height:2px;background:rgba(255,255,255,.35)}
+.lb .lbd i.on{background:#fff}
 .lb img{max-width:92vw;max-height:90vh;margin:auto;border-radius:16px;box-shadow:0 30px 60px -20px rgba(0,0,0,.6);cursor:default}
 .lb .lbf{display:none;margin:auto;height:min(90vh,calc(92vw / .4627));aspect-ratio:.4627;overflow:hidden;border-radius:16px;background:#fff;box-shadow:0 30px 60px -20px rgba(0,0,0,.6);cursor:default}
 .lb .lbf img{width:100%;max-width:none;max-height:none;margin:0;border-radius:0;box-shadow:none;display:block;animation:lbscroll 7s ease-in-out infinite}
@@ -852,16 +855,19 @@ renderGrid(true);
 setLang(L);
 setPad();
 </script>
-<div class="lb" id="lb"><button class="x" aria-label="Fermer">✕</button><button class="pv" aria-label="Précédente">←</button><img alt=""><div class="lbf"><img alt=""></div><button class="nx" aria-label="Suivante">→</button></div>
+<div class="lb" id="lb"><button class="x" aria-label="Fermer">✕</button><button class="pv" aria-label="Précédente">←</button><img alt=""><div class="lbf"><img alt=""></div><button class="nx" aria-label="Suivante">→</button><div class="lbd"></div></div>
 <script>
 (()=>{const lb=document.getElementById("lb"),im=lb.querySelector(":scope>img"),fr=lb.querySelector(".lbf"),fi=fr.querySelector("img");
 const fit=()=>{fi.style.setProperty("--t",-(fi.offsetHeight-fr.clientHeight)+"px");};fi.addEventListener("load",fit);addEventListener("resize",fit);let list=[],k=0;
-const show=()=>{const t=list[k];const lg=t.dataset.full!==t.getAttribute("src");lb.classList.toggle("long",lg);if(lg){fi.src=t.dataset.full;fi.alt=t.alt;requestAnimationFrame(fit);}else{im.src=t.dataset.full;im.alt=t.alt;}lb.scrollTop=0;const m=list.length>1;lb.querySelector(".pv").style.visibility=lb.querySelector(".nx").style.visibility=m?"visible":"hidden";};
+const show=()=>{const t=list[k];const lg=t.dataset.full!==t.getAttribute("src");lb.classList.toggle("long",lg);if(lg){fi.src=t.dataset.full;fi.alt=t.alt;requestAnimationFrame(fit);}else{im.src=t.dataset.full;im.alt=t.alt;}lb.scrollTop=0;lb.querySelector(".lbd").innerHTML=list.length>1?list.map((_,i)=>`<i class="${i===k?"on":""}"></i>`).join(""):"";const m=list.length>1;lb.querySelector(".pv").style.visibility=lb.querySelector(".nx").style.visibility=m?"visible":"hidden";};
 window.lbOpen=()=>lb.classList.contains("on");
 window.lbClose=()=>{lb.classList.remove("on");document.documentElement.style.overflow="";};
 window.lbStep=d=>{k=(k+d+list.length)%list.length;show();};
 document.addEventListener("click",e=>{const t=e.target.closest(".ashots img");if(t){list=[...t.closest(".ashots").querySelectorAll("img")];k=list.indexOf(t);show();lb.classList.add("on");document.documentElement.style.overflow="hidden";}});
-lb.addEventListener("click",e=>{if(e.target.closest(".pv"))return lbStep(-1);if(e.target.closest(".nx"))return lbStep(1);if(e.target!==im&&!e.target.closest(".lbf"))lbClose();});
+let sx=0,sy=0,sw=false;
+lb.addEventListener("touchstart",e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;sw=false;},{passive:true});
+lb.addEventListener("touchend",e=>{const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;if(list.length>1&&Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.3){sw=true;lbStep(dx<0?1:-1);}},{passive:true});
+lb.addEventListener("click",e=>{if(sw){sw=false;return;}if(e.target.closest(".pv"))return lbStep(-1);if(e.target.closest(".nx"))return lbStep(1);if(e.target!==im&&!e.target.closest(".lbf"))lbClose();});
 })();
 </script>
 </body>
