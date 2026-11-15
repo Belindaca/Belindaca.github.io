@@ -597,7 +597,7 @@ const T = {
    maisonK:"Bélinda",maisonH:"De la stratégie <em>au produit.</em>",
    m1:"Avant, je concevais des recommandations médias sur mesure pour chaque client. Aujourd'hui, je construis des produits avec l'IA, avec la même méthode : comprendre le contexte et les ambitions, lire les données et les enjeux.",
    m2:"J'aime transformer une idée en produit qu'on a vraiment envie d'utiliser : simple, rapide, et soigné jusque dans les moindres détails.",
-   write:"Écrire sur LinkedIn",career:"Parcours",toolsK:"Les outils",numsK:"En chiffres",nums:[["5","ans en AdTech"],["30+","marchés accompagnés"],["8","projets construits avec l'IA"]],
+   write:"Écrire sur LinkedIn",career:"Parcours",toolsK:"Les outils",numsK:"En chiffres",nums:[["5","ans en AdTech"],["30+","marchés accompagnés"],["#P","projets construits avec l'IA"]],
    brands:"<b>Luxe &amp; beauté</b><br>LVMH, Richemont, L'Oréal, Coty · plus de 30 marchés",
    jobs:[["Snap","Global Account Manager","Stratégie média internationale, L'Oréal Global, P&G Europe"],["TikTok","Strategic Account Planner","Recommandations média et créateurs, marques luxe et beauté"],["Google France","Analytical Consultant","Performance marketing"]],
    tools:["Prototypage et développement","Mise en ligne","Base de données et comptes","Développement assisté par IA","Assistant IA","L'IA de mes automatisations","Automatisations","Code source"]},
@@ -608,7 +608,7 @@ const T = {
    maisonK:"Bélinda",maisonH:"From strategy <em>to product.</em>",
    m1:"Before, I designed tailored media recommendations for each client. Today, I build products with AI, using the same method: understand the context and the ambitions, read the data and what's at stake.",
    m2:"I love turning an idea into a product people genuinely want to use: simple, fast, and thoughtfully crafted down to the smallest detail.",
-   write:"Message me on LinkedIn",career:"Experience",toolsK:"The tools",numsK:"In numbers",nums:[["5","years in AdTech"],["30+","markets supported"],["8","products built with AI"]],
+   write:"Message me on LinkedIn",career:"Experience",toolsK:"The tools",numsK:"In numbers",nums:[["5","years in AdTech"],["30+","markets supported"],["#P","products built with AI"]],
    brands:"<b>Luxury &amp; beauty</b><br>LVMH, Richemont, L'Oréal, Coty · 30+ markets",
    jobs:[["Snap","Global Account Manager","International media strategy, L'Oréal Global, P&G Europe"],["TikTok","Strategic Account Planner","Media and creator recommendations, luxury and beauty brands"],["Google France","Analytical Consultant","Performance marketing"]],
    tools:["Prototyping & building","Deployment","Database & auth","AI-assisted coding","AI assistant","The AI in my automations","Automations","Source code"]}
@@ -726,7 +726,7 @@ function closePanel(){
 }
 function renderMaison(){
   document.getElementById("mh").innerHTML=t("maisonH");
-  document.getElementById("nums").innerHTML=t("nums").map(n=>`<div><b>${n[0]}</b><span>${n[1]}</span></div>`).join("");
+  document.getElementById("nums").innerHTML=t("nums").map(n=>`<div><b>${n[0]==="#P"?P.length:n[0]}</b><span>${n[1]}</span></div>`).join("");
   document.getElementById("mtools").innerHTML=TOOLN.map((n,i)=>`<div><span class="tl">${lg(TOOLSVG[i],TOOLC[i])}${n}</span><span>${t("tools")[i]}</span></div>`).join("");
   document.getElementById("logos").innerHTML=COMP.map(c=>`<span>${lg(c[1],c[2])}<small>${c[0]}</small></span>`).join("");
   {const io=new IntersectionObserver(es=>es.forEach(x=>x.target.classList.toggle("lit",x.isIntersecting)),{rootMargin:"-40% 0px -40% 0px"});document.querySelectorAll("#mtools > div, #logos > span").forEach(el=>io.observe(el));}
