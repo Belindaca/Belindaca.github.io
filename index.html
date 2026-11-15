@@ -321,7 +321,7 @@ footer a,footer span{white-space:nowrap}
       <button data-go="projets" class="on" data-t="projects"></button>
       <button data-go="auto" data-t="automations"></button>
       <button data-go="maison" data-t="maison" class="hide-m"></button>
-      <button data-go="journal" data-t="journal"></button>
+      <button data-go="journal" data-t="journal" hidden></button>
     </nav>
     <nav>
       <span class="hide-m">Paris</span>
@@ -760,7 +760,9 @@ function renderJournal(id){
       <span class="jr">${readTime(a)} ${t("min")} <i>→</i></span></button>`}).join("")}</div>`;
   jb.querySelectorAll(".jrow").forEach(r=>r.onclick=()=>{renderJournal(r.dataset.j);window.scrollTo({top:0});});
 }
+const JOURNAL_ON=false;
 function showJournal(){
+  if(!JOURNAL_ON){ page="projets"; return; }
   hideMaison(); closePanel(); page="journal"; document.body.classList.add("jpage"); setNav("journal");
   renderJournal(); window.scrollTo({top:0}); syncHH();
 }
