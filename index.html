@@ -88,6 +88,7 @@ body.open aside{display:block}
 .track{position:absolute;inset:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
 .track::-webkit-scrollbar{display:none}
 .slide{flex:0 0 100%;height:100%;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;scroll-snap-stop:always}
+.slide iframe.fig{flex:0 0 auto;height:calc(78vh - 110px);width:min(92%,calc((78vh - 110px)*.6));border:0;border-radius:18px;background:#fff;box-shadow:0 30px 40px -20px rgba(0,0,0,.35)}
 .slide video{max-height:calc(78vh - 150px);max-width:90%;box-shadow:0 30px 40px -20px rgba(0,0,0,.6);display:block}
 .slide img{max-height:calc(78vh - 150px);max-width:66%;box-shadow:0 30px 40px -20px rgba(0,0,0,.6);user-select:none;-webkit-user-drag:none}
 .vis .arr,.vis .cnt{z-index:2}
@@ -265,6 +266,7 @@ footer a,footer span{white-space:nowrap}
 
 @media (max-width:860px){
   .slide img,.slide video{max-height:78%}
+  .slide iframe.fig{height:calc(100% - 36px);max-height:none;width:auto;aspect-ratio:.6;max-width:92%}
   .journal{padding-top:30px}
   .jrow,.jrow.wimg{grid-template-columns:1fr;gap:10px}
   .jn{display:none}
@@ -418,6 +420,28 @@ const P_ALL = [
   },
   "tags": [
    "fin"
+  ]
+ },
+ {
+  "id": "merveilles",
+  "n": "Les Merveilles du Monde",
+  "cat": "Design · Figma",
+  "bg": "#e9dfcf",
+  "url": "https://www.figma.com/proto/p4hTzP3unoHIusWgk0rdYX/Les-Merveilles-du-Monde?node-id=3733-18739&starting-point-node-id=3733%3A18739",
+  "fig": "https://embed.figma.com/proto/p4hTzP3unoHIusWgk0rdYX/Les-Merveilles-du-Monde?node-id=3733-18739&scaling=scale-down&content-scaling=fixed&page-id=3678%3A1295&starting-point-node-id=3733%3A18739&show-proto-sidebar=0&embed-host=share",
+  "h": "Une appli pour vivre un salon d’exposition.",
+  "d": "L’application du salon « Les Merveilles du Monde », pensée et maquettée dans Figma. Le prototype est interactif : clique dans l’écran pour le parcourir.",
+  "s": [
+   "captures/merveilles-cover.jpg"
+  ],
+  "host": "figma.com",
+  "en": {
+   "cat": "Design · Figma",
+   "h": "An app to experience an exhibition.",
+   "d": "The app for the “Merveilles du Monde” exhibition, designed and prototyped in Figma. The prototype is interactive: click inside the screen to explore it."
+  },
+  "tags": [
+   "design"
   ]
  },
  {
@@ -591,7 +615,7 @@ const P = P_ALL.filter(p=>!p.hidden);
 const PHOTO = "captures/portrait.jpg";
 const T = {
  fr:{projects:"Projets",automations:"Automatisations",maison:"Portrait",tagline:"BetoB · De la stratégie au produit",
-   all:"Tous",ia:"IA",bien:"Bien-être",fin:"Finances",mob:"Mobilité",code:"Code",
+   all:"Tous",ia:"IA",bien:"Bien-être",fin:"Finances",mob:"Mobilité",design:"Design",code:"Code",
    close:"Fermer",discover:"Découvrir le projet",next:"Projet suivant",prev:"Précédente",nextShot:"Suivante",shot:"Capture",
    autoK:"Automatisations IA",journal:"Journal",journalH:"Journal",journalP:"Mes idées sur l'IA, le produit et la façon de construire.",jSoon:"Les premiers textes arrivent bientôt.",jSoonP:"En attendant, retrouve mes publications sur LinkedIn.",read:"Lire",back:"Retour au journal",min:"min de lecture",orig:"Publié d'abord sur LinkedIn",orMail:"Ou par e-mail",copy:"Copier",copied:"Copié",result:"Résultat",autoH:"Les automatisations<br><em>que j’utilise chaque jour.</em>",autoP:"Des règles simples d'abord, un modèle d'IA là où elles ne suffisent pas.",
    maisonK:"Bélinda",maisonH:"De la stratégie <em>au produit.</em>",
@@ -602,7 +626,7 @@ const T = {
    jobs:[["Snap","Global Account Manager","Stratégie média internationale, L'Oréal Global, P&G Europe"],["TikTok","Strategic Account Planner","Recommandations média et créateurs, marques luxe et beauté"],["Google France","Analytical Consultant","Performance marketing"]],
    tools:["Prototypage et développement","Maquettes et design","Mise en ligne","Base de données et comptes","Développement assisté par IA","Assistant IA","L'IA de mes automatisations","Automatisations","Code source"]},
  en:{projects:"Projects",automations:"Automations",maison:"Portrait",tagline:"BetoB · From strategy to product",
-   all:"All",ia:"AI",bien:"Wellbeing",fin:"Finance",mob:"Mobility",code:"Code",
+   all:"All",ia:"AI",bien:"Wellbeing",fin:"Finance",mob:"Mobility",design:"Design",code:"Code",
    close:"Close",discover:"Discover the project",next:"Next project",prev:"Previous",nextShot:"Next",shot:"Screen",
    autoK:"AI automations",journal:"Journal",journalH:"Journal",journalP:"My thoughts on AI, product and how to build.",jSoon:"The first pieces are coming soon.",jSoonP:"In the meantime, find my posts on LinkedIn.",read:"Read",back:"Back to the journal",min:"min read",orig:"First published on LinkedIn",orMail:"Or by email",copy:"Copy",copied:"Copied",result:"Result",autoH:"Automations<br><em>I use every day.</em>",autoP:"Simple rules first, an AI model only where rules fall short.",
    maisonK:"Bélinda",maisonH:"From strategy <em>to product.</em>",
@@ -664,7 +688,7 @@ function applyFilter(first,anim=true){
   });
 }
 function renderFilters(){
-  const keys=["all","ia","bien","fin","mob","code"].filter(k=>k==="all"||P.some(p=>p.tags.includes(k)));
+  const keys=["all","ia","bien","fin","mob","design","code"].filter(k=>k==="all"||P.some(p=>p.tags.includes(k)));
   fl.innerHTML=keys.map(k=>`<button data-f="${k}" class="${k===filter?"on":""}">${t(k)}</button>`).join("");
   fl.querySelectorAll("button").forEach(b=>b.onclick=()=>{filter=b.dataset.f; renderFilters(); applyFilter(false);});
 }
@@ -681,9 +705,9 @@ function openProject(i,s=0){
   const light=isLight(p.bg);
   panel.innerHTML=`<div class="qv">
     <div class="vis ${light?"light":""}" style="background:${p.bg}">
-      <div class="track" id="track">${p.s.map((src,j)=>`<div class="slide">${isVid(src)?`<video src="${src}" autoplay muted loop playsinline preload="metadata"></video>`:`<img src="${src}" alt="${t("shot")} ${j+1} ${p.n}">`}</div>`).join("")}</div>
-      ${p.s.length>1?`<button class="arr prev" aria-label="${t("prev")}">←</button><button class="arr next" aria-label="${t("nextShot")}">→</button>`:""}
-      <span class="cnt">${pad(shot+1)} / ${pad(p.s.length)}</span>
+      <div class="track" id="track">${p.fig?`<div class="slide"><iframe class="fig" src="${p.fig}" title="${p.n}" allowfullscreen loading="lazy"></iframe></div>`:p.s.map((src,j)=>`<div class="slide">${isVid(src)?`<video src="${src}" autoplay muted loop playsinline preload="metadata"></video>`:`<img src="${src}" alt="${t("shot")} ${j+1} ${p.n}">`}</div>`).join("")}</div>
+      ${p.s.length>1&&!p.fig?`<button class="arr prev" aria-label="${t("prev")}">←</button><button class="arr next" aria-label="${t("nextShot")}">→</button>`:""}
+      ${p.fig?"":`<span class="cnt">${pad(shot+1)} / ${pad(p.s.length)}</span>`}
     </div>
     <div class="tx">
       <div class="bar pbar"><span class="k">${pc(p,"cat")}</span><button class="u" id="close">${t("close")}</button></div>
@@ -692,7 +716,7 @@ function openProject(i,s=0){
       ${p.s.length>1?`<div class="sw">${p.s.map((src,j)=>`<button data-s="${j}" class="${j===shot?"on":""}" aria-label="${t("shot")} ${j+1}"><i></i></button>`).join("")}</div>`:""}
       <a class="btn" href="${p.url}" target="_blank" rel="noopener">${t("discover")}</a>
       <button class="lk u" id="nextp">${t("next")}</button>
-      <div class="meta"><span>${p.n}</span><span>${p.url.includes("vercel")?"Vercel":p.url.includes("github.io")?"GitHub Pages":"Lovable"}</span></div>
+      <div class="meta"><span>${p.n}</span><span>${p.fig?"Figma":p.url.includes("vercel")?"Vercel":p.url.includes("github.io")?"GitHub Pages":"Lovable"}</span></div>
     </div></div>`;
   panel.querySelector("#close").onclick=closePanel;
   panel.querySelector("#nextp").onclick=()=>openProject((i+1)%P.length);
